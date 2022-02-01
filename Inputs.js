@@ -2,6 +2,15 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 
+/*
+This class currently renders three componets to the screen. Two text boxes that accept an
+e-mail and password and an enter button. When the enter button is pressed, the e-mail
+and password is displayed in a chrome drop-down message. The CSS put in here also makes
+the log in page have facebook colour's. The CSS will need its own file and then importing
+into here. Best Practice :)
+*/
+
+
 class Inputs extends Component {
     state = {
        email: '',
