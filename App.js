@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput } from 'react-native';
 import ReactDOM from 'react-dom';
-import LoginPage from '';
+import LoginPage from './js/pages/LoginPage';
 
 /*
 This is the entry point for the application
