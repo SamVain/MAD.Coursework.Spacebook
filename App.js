@@ -1,3 +1,4 @@
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput} from 'react-native';
@@ -22,7 +23,7 @@ class App extends Component {
   }
 }
 
+export default App;
+
 //<StatusBar barStyle="light-content" /> 
 //<SpacebookHeader />
-
-export default App;

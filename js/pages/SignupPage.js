@@ -5,6 +5,7 @@ import ConfirmLastNameBox from '../components/inputBoxes/ConfirmLastNameBox';
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox';
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import ConfirmPasswordBox from '../components/inputBoxes/ConfirmPasswordInputBox';
+import SignUpButton from '../components/buttons/SignUpButton';
 
 
 
@@ -17,6 +18,7 @@ class SignupPage extends Component {
            <EnterEmailBox />
            <EnterPasswordBox />
            <ConfirmPasswordBox />
+           <SignUpButton />
         </View>
       );
     }

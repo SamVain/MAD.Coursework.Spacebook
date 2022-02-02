@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
+import SignInButton from '../components/buttons/SignInButton';
 
 
 /*
@@ -21,6 +22,7 @@ class LoginPage extends Component {
         <View>
            <EnterEmailBox />
            <EnterPasswordBox />
+           <SignInButton />
         </View>
       );
     }
