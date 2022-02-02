@@ -1,6 +1,9 @@
 
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
+import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
+
 
 /*
 This class currently renders three componets to the screen. Two text boxes that accept an
@@ -11,7 +14,23 @@ into here. Best Practice :)
 */
 
 
+
 class LoginPage extends Component {
+   render(){
+      return (
+        <View>
+           <EnterEmailBox />
+           <EnterPasswordBox />
+        </View>
+      );
+    }
+}
+
+export default LoginPage
+
+
+
+/*class LoginPage extends Component {
     state = {
        email: '',
        password: ''
@@ -75,5 +94,5 @@ class LoginPage extends Component {
        color: 'white'
     }
   })
-  
+*/
   

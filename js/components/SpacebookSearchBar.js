@@ -5,7 +5,7 @@ function SpacebookSearchBar() {
   const [value, setValue] = React.useState("");
   return (
     <SearchBar
-      platform="default"
+      platform="android"
       containerStyle={{}}
       inputContainerStyle={{}}
       inputStyle={{}}
@@ -15,15 +15,23 @@ function SpacebookSearchBar() {
       loadingProps={{}}
       onChangeText={newVal => setValue(newVal)}
       onClearText={() => console.log(onClearText())}
-      placeholder="Search..."
+      placeholder="Type query here..."
       placeholderTextColor="#888"
+      round
       cancelButtonTitle="Cancel"
       cancelButtonProps={{}}
       onCancel={() => console.log(onCancel())}
       value={value}
-      inputContainerStyle={{ height: 20, width: 150 }}
+      inputContainerStyle={{ height: 20 }}
     />
   );
 }
 
 export default SpacebookSearchBar
+
+
+
+
+
+
+//inputContainerStyle={{ height: 20, width: 150 }}
