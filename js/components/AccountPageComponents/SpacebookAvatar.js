@@ -5,7 +5,7 @@ function SpacebookAvatar() {
   return (
     <Avatar
       activeOpacity={0.2}
-      avatarStyle={{}}
+      avatarStyle={{ }}
       containerStyle={{ backgroundColor: "#BDBDBD" }}
       icon={{}}
       iconStyle={{}}

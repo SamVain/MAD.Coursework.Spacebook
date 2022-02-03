@@ -16,7 +16,7 @@ class App extends Component {
   render(){
     return (
       <View>
-        <LoginPage />
+        <AccountPage />
       </View>
       //<LoginPage />
       //<SignupPage />
