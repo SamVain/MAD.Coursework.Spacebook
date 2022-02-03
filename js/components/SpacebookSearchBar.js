@@ -15,7 +15,7 @@ function SpacebookSearchBar() {
       loadingProps={{}}
       onChangeText={newVal => setValue(newVal)}
       onClearText={() => console.log(onClearText())}
-      placeholder="Type query here..."
+      placeholder="Search..."
       placeholderTextColor="#888"
       round
       cancelButtonTitle="Cancel"

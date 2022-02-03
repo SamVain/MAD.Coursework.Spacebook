@@ -7,6 +7,7 @@ import LoginPage from './js/pages/LoginPage';
 import SignupPage from './js/pages/SignupPage';
 import SpacebookHeader from './js/components/SpacebookHeader';
 import HomePage from './js/pages/HomePage';
+import AccountPage from './js/pages/AccountPage';
 
 /*
 This is the entry point for the application
@@ -15,7 +16,7 @@ class App extends Component {
   render(){
     return (
       <View>
-        <SpacebookHeader />
+        <AccountPage />
       </View>
       //<LoginPage />
       //<SignupPage />
