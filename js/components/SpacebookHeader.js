@@ -3,6 +3,7 @@ import { Header } from "react-native-elements";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SpacebookSearchBar from "./SpacebookSearchBar";
+import HeaderButtonGroup from "./SpacebookHeaderButtonGroup";
 
 //import LinearGradient from 'react-native-linear-gradient';
 
@@ -22,10 +23,12 @@ function SpacebookHeader(){
         leftContainerStyle={{}}
         linearGradientProps={{}}
         placement="left"
-        rightComponent={<SpacebookSearchBar/>}
+        rightComponent={{}}
         rightContainerStyle={{}}
         statusBarProps={{}}
       />
+      <HeaderButtonGroup>
+      </HeaderButtonGroup>
     </SafeAreaProvider>
   );
 }

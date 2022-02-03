@@ -9,6 +9,8 @@ import SpacebookHeader from './js/components/SpacebookHeader';
 import HomePage from './js/pages/HomePage';
 import AccountPage from './js/pages/AccountPage';
 
+'use strict'
+
 /*
 This is the entry point for the application
 */
@@ -16,7 +18,7 @@ class App extends Component {
   render(){
     return (
       <View>
-        <AccountPage />
+        <HomePage />
       </View>
       //<LoginPage />
       //<SignupPage />
