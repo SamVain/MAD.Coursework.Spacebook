@@ -7,7 +7,7 @@ function SignUpButton() {
   return (
     <View style={styles.container}>
         <TouchableOpacity onPress={() => alert('Hello, world!')} style={styles.button}>
-            <Text style={styles.buttonText}>SIUU</Text>
+          <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
     </View>
   );

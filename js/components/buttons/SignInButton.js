@@ -1,15 +1,16 @@
 import * as React from "react";
-import { Button } from "react-native-elements";
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Button, ButtonGroup, withTheme, Text } from 'react-native-elements';
+
 //import LinearGradient from "react-native-linear-gradient";
 
 function SignInButton() {
   return (
-  <View style={styles.container}>
-      <TouchableOpacity onPress={() => alert('Hello, world!')} style={styles.button}>
-        <Text style={styles.buttonText}>SIUU</Text>
-      </TouchableOpacity>
-  </View>
+    <View style={styles.container}>
+        <TouchableOpacity onPress={() => alert('Hello, world!')} style={styles.button}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </TouchableOpacity>
+    </View>
   );
 }
 
@@ -20,11 +21,6 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    logo: {
-      width: 305,
-      height: 159,
-      marginBottom: 20,
-    },
     instructions: {
       color: '#888',
       fontSize: 18,
@@ -32,9 +28,10 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     button: {
-      backgroundColor: "blue",
+      backgroundColor: "#4267B2",
       padding: 20,
       borderRadius: 5,
+
     },
     buttonText: {
       fontSize: 20,

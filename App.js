@@ -15,7 +15,7 @@ class App extends Component {
   render(){
     return (
       <View>
-        <SignupPage />
+        <SpacebookHeader />
       </View>
       //<LoginPage />
       //<SignupPage />
