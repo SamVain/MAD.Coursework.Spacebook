@@ -8,6 +8,7 @@ import SignupPage from './js/pages/SignupPage';
 import SpacebookHeader from './js/components/SpacebookHeader';
 import HomePage from './js/pages/HomePage';
 import AccountPage from './js/pages/AccountPage';
+import SearchPage from './js/pages/SearchPage';
 
 'use strict'
 
