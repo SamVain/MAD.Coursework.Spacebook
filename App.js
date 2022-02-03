@@ -16,7 +16,7 @@ class App extends Component {
   render(){
     return (
       <View>
-        <AccountPage />
+        <LoginPage />
       </View>
       //<LoginPage />
       //<SignupPage />
@@ -25,6 +25,3 @@ class App extends Component {
 }
 
 export default App;
-
-//<StatusBar barStyle="light-content" /> 
-//<SpacebookHeader />

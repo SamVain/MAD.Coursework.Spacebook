@@ -4,6 +4,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import SignInButton from '../components/buttons/SignInButton';
+import Title from '../components/misc/LoginSigninTitle';
 
 
 /*
@@ -20,6 +21,7 @@ class LoginPage extends Component {
    render(){
       return (
         <View>
+           <Title />
            <EnterEmailBox />
            <EnterPasswordBox />
            <SignInButton />
