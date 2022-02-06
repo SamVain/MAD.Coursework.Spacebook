@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import TabNavigator from './js/components/TabNavigator'
 import SpacebookHeader from './js/components/SpacebookHeader';
+import SigninTabNavigator from './js/components/SigninTabNavigator';
 
 import LoginPage from './js/pages/LoginPage';
 
@@ -25,15 +26,13 @@ const App = () => {
   return(
     <div>
            {userToken == null ? (
-
-            <LoginPage/>
-
-           ):(
+            <SigninTabNavigator/>
+          ):(
             <>
-            <SpacebookHeader/>
-            <TabNavigator/>
+              <SpacebookHeader/>
+              <TabNavigator/>
             </>
-           )}
+          )}
 
     </div>     
   )

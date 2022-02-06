@@ -25,20 +25,6 @@ function HeaderButtonGroup({ navigation }) {
 
   );
 
-/*   return (
-    <ButtonGroup
-      buttons={buttons}    
-      selectedIndex={selectedIndex}
-      onPress={(value) => navigation.navigate(buttons[value]) }      
-      containerStyle={{ marginBottom: 20 }}
-    />
-  ); */
-
-
-
-
-
-
 }
 
 export default HeaderButtonGroup

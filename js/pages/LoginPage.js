@@ -8,6 +8,7 @@ import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import SignInButton from '../components/buttons/SignInButton';
 import Title from '../components/misc/LoginSigninTitle';
+//import GoToSignUpButton from '../components/buttons/GoToSignUpButton';
 
 /*
 This class currently renders three componets to the screen. Two text boxes that accept an
@@ -20,99 +21,49 @@ into here. Best Practice :)
 function LoginPage({ navigation }) {
 
          return (
-            
-            <View>
-               
+            <View style={styles.container}>
                <Title />
                <EnterEmailBox />
                <EnterPasswordBox />
                <SignInButton />
- 
+               <Text style={ styles.text }>
+                  Not Got An Account? Sign Up Above!
+               </Text>
             </View>
-         ); 
-
+         );
 }
-/* 
-class LoginPage extends Component {
-   render(){
-      return (
-        <View>
-           <Title />
-           <EnterEmailBox />
-           <EnterPasswordBox />
-           <SignInButton />
-        </View>
-      );
-    }
-} */
+
+const styles = StyleSheet.create ({
+   container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 20
+    },
+    instructions: {
+      color: '#888',
+      fontSize: 18,
+      marginHorizontal: 15,
+      marginBottom: 10,
+    },
+   text: {
+      fontSize: 15,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: "#4267B2",
+      paddingTop: 30
+   },
+   button: {
+      backgroundColor: "#4267B2",
+      padding: 20,
+      borderRadius: 5,
+    },
+    buttonText: {
+      fontSize: 20,
+      color: '#fff',
+    },
+});
+
 
 export default LoginPage
-
-
-
-/*class LoginPage extends Component {
-    state = {
-       email: '',
-       password: ''
-    }
-    handleEmail = (text) => {
-       this.setState({ email: text })
-    }
-    handlePassword = (text) => {
-       this.setState({ password: text })
-    }
-    login = (email, pass) => {
-       alert('email: ' + email + ' password: ' + pass)
-    }
-    render() {
-       return (
-          <View style = {styles.container}>
-             <TextInput style = {styles.input}
-                underlineColorAndroid = "transparent"
-                placeholder = "Email"
-                placeholderTextColor = "#4267B2"
-                autoCapitalize = "none"
-                onChangeText = {this.handleEmail}/>
-             
-             <TextInput style = {styles.input}
-                underlineColorAndroid = "transparent"
-                placeholder = "Password"
-                placeholderTextColor = "#4267B2"
-                autoCapitalize = "none"
-                onChangeText = {this.handlePassword}/>
-             
-             <TouchableOpacity
-                style = {styles.submitButton}
-                onPress = {
-                   () => this.login(this.state.email, this.state.password)
-                }>
-                <Text style = {styles.submitButtonText}> Submit </Text>
-             </TouchableOpacity>
-          </View>
-       )
-    }
-  }
-  export default LoginPage
-  
-  const styles = StyleSheet.create({
-    container: {
-       paddingTop: 23
-    },
-    input: {
-       margin: 15,
-       height: 40,
-       borderColor: '#4267B2',
-       borderWidth: 1
-    },
-    submitButton: {
-       backgroundColor: '#4267B2',
-       padding: 10,
-       margin: 15,
-       height: 40,
-    },
-    submitButtonText:{
-       color: 'white'
-    }
-  })
-*/
-  

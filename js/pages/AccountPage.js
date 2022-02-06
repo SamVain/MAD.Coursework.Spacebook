@@ -9,35 +9,38 @@ function AccountPage({ navigation }) {
     return (
         <View>
             <SpacebookAvatar />
+            <TouchableOpacity onPress={() => alert('TAKE ME HOOOMMMEEE YANITED ROAD')} style={styles.button}>
+                <Text style={styles.buttonText}>Log Out</Text>
+            </TouchableOpacity>
         </View>
     ); 
 
 }
 
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 20
+    },
+    instructions: {
+      color: '#888',
+      fontSize: 18,
+      marginHorizontal: 15,
+      marginBottom: 10,
+    },
+    button: {
+      backgroundColor: "#4267B2",
+      padding: 20,
+      borderRadius: 5,
+  
+    },
+    buttonText: {
+      fontSize: 20,
+      color: '#fff',
+    }, 
+  });
 
-
-
-/* 
-function AccountPage({ navigation }) {
-
-    return (
-        <View>
-            <SpacebookHeader navigation={navigation}/>
-            <SpacebookAvatar />
-        </View>
-    ); 
-
-}
-
-class AccountPage extends Component {
-    render() {
-        return (
-            <View>
-                <SpacebookHeader />
-                <SpacebookAvatar />
-            </View>
-        )
-    }
-}
- */
 export default AccountPage

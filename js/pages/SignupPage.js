@@ -13,18 +13,8 @@ import Title from '../components/misc/LoginSigninTitle';
 
 function SignupPage({ navigation }) {
 
-/*    return (
-      <View>
-          <Text>Signup Page</Text>
-      </View>
-  );  */
-
-
-
-
-
    return (
-      <View>
+      <View style={styles.container}>
          <Title />
          <EnterFirstNameBox />
          <ConfirmLastNameBox />
@@ -32,33 +22,41 @@ function SignupPage({ navigation }) {
          <EnterPasswordBox />
          <ConfirmPasswordBox />
          <SignUpButton navigation={navigation}/>
-
       </View>
    ); 
 
 }
 
-
-
-
-/* 
-class SignupPage extends Component {
-   constructor(props) {
-      super(props);
-    }
-   render(){
-      return (
-        <View>
-           <Title />
-           <EnterFirstNameBox />
-           <ConfirmLastNameBox />
-           <EnterEmailBox />
-           <EnterPasswordBox />
-           <ConfirmPasswordBox />
-           <SignUpButton />
-        </View>
-      );
-    }
-} */
+const styles = StyleSheet.create ({
+   container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 20
+    },
+    instructions: {
+      color: '#888',
+      fontSize: 18,
+      marginHorizontal: 15,
+      marginBottom: 10,
+    },
+   text: {
+      fontSize: 15,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: "#4267B2",
+      paddingTop: 30
+   },
+   button: {
+      backgroundColor: "#4267B2",
+      padding: 20,
+      borderRadius: 5,
+    },
+    buttonText: {
+      fontSize: 20,
+      color: '#fff',
+    },
+});
 
 export default SignupPage
