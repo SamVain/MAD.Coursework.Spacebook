@@ -13,18 +13,28 @@ import Title from '../components/misc/LoginSigninTitle';
 
 function SignupPage({ navigation }) {
 
-         return (
-            <View>
-               <Title />
-               <EnterFirstNameBox />
-               <ConfirmLastNameBox />
-               <EnterEmailBox />
-               <EnterPasswordBox />
-               <ConfirmPasswordBox />
-               <SignUpButton navigation={navigation}/>
+/*    return (
+      <View>
+          <Text>Signup Page</Text>
+      </View>
+  );  */
 
-            </View>
-         ); 
+
+
+
+
+   return (
+      <View>
+         <Title />
+         <EnterFirstNameBox />
+         <ConfirmLastNameBox />
+         <EnterEmailBox />
+         <EnterPasswordBox />
+         <ConfirmPasswordBox />
+         <SignUpButton navigation={navigation}/>
+
+      </View>
+   ); 
 
 }
 

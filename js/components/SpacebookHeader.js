@@ -38,7 +38,7 @@ function SpacebookHeader({navigation}){
         rightContainerStyle={{}}
         statusBarProps={{}}
       />
-      <HeaderButtonGroup navigation={navigation}/>
+{/*       <HeaderButtonGroup navigation={navigation}/> */}
 
     </SafeAreaProvider>
   );

@@ -22,8 +22,7 @@ function LoginPage({ navigation }) {
          return (
             
             <View>
-               <Text>Login Page</Text>
- 
+               
                <Title />
                <EnterEmailBox />
                <EnterPasswordBox />
