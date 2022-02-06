@@ -1,11 +1,13 @@
 
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import SignInButton from '../components/buttons/SignInButton';
 import Title from '../components/misc/LoginSigninTitle';
-
 
 /*
 This class currently renders three componets to the screen. Two text boxes that accept an
@@ -15,8 +17,23 @@ the log in page have facebook colour's. The CSS will need its own file and then 
 into here. Best Practice :)
 */
 
+function LoginPage({ navigation }) {
 
+         return (
+            
+            <View>
+               <Text>Login Page</Text>
+ 
+               <Title />
+               <EnterEmailBox />
+               <EnterPasswordBox />
+               <SignInButton />
+ 
+            </View>
+         ); 
 
+}
+/* 
 class LoginPage extends Component {
    render(){
       return (
@@ -28,7 +45,7 @@ class LoginPage extends Component {
         </View>
       );
     }
-}
+} */
 
 export default LoginPage
 

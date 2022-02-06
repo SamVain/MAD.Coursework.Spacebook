@@ -1,37 +1,44 @@
-import * as React from "react";
+import React, {useState} from 'react'
 import { ButtonGroup } from "react-native-elements";
 
-function HeaderButtonGroup() {
-  const [
-    selectedIndex,
-    setSelectedIndex
-  ] = React.useState(0);
-  const [
-    selectedIndexes,
-    setSelectedIndexes
-  ] = React.useState([]);
+function HeaderButtonGroup({ navigation }) {
+
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndexes, setSelectedIndexes] = useState([0, 2, 3]);
+  const buttons = ['Home', 'Search', 'Account']
+
+  const btnPress = (value) => {
+
+    setSelectedIndex(value);
+
+    navigation.navigate(buttons[value]);
+  }
+
   return (
+
     <ButtonGroup
-      buttonStyle={{ width: 100 }}
-      buttonContainerStyle={{}}
-      buttons={["Home", "Search", "Account"]}
-      containerStyle={{}}
-      disabled={[3, 4]}
-      disabledStyle={{}}
-      disabledTextStyle={{}}
-      disabledSelectedStyle={{}}
-      disabledSelectedTextStyle={{}}
-      innerBorderStyle={{}}
-      onPress={selectedIdx =>
-        setSelectedIndex(selectedIdx)
-      }
-      selectedButtonStyle={{}}
+      buttons={buttons}    
       selectedIndex={selectedIndex}
-      selectedIndexes={selectedIndexes}
-      selectedTextStyle={{}}
-      textStyle={{}}
+      onPress={(value) => btnPress(value)}      
+      containerStyle={{ marginBottom: 20 }}
     />
+
   );
+
+/*   return (
+    <ButtonGroup
+      buttons={buttons}    
+      selectedIndex={selectedIndex}
+      onPress={(value) => navigation.navigate(buttons[value]) }      
+      containerStyle={{ marginBottom: 20 }}
+    />
+  ); */
+
+
+
+
+
+
 }
 
 export default HeaderButtonGroup

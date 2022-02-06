@@ -9,12 +9,12 @@ import LoginPage from "../js/pages/LoginPage";
 
 const Stack = createNativeStackNavigator();
 
-function HomeStack() {
+const HomeStack = () => {
     return(
         <Stack.Navigator>
+            <Stack.Screen name="Signup" component={SignupPage} />
             <Stack.Screen name="Home" component={HomePage} />
             <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen name="Signup" component={SignupPage} />
             <Stack.Screen name="Search" component={SearchPage} />
             <Stack.Screen name="Account" component={AccountPage} />
         </Stack.Navigator>

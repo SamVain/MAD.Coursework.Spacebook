@@ -1,19 +1,82 @@
-import * as React from "react";
-import { Button } from "react-native-elements";
+import React from 'react';
+import { Button } from "react-native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-//import LinearGradient from "react-native-linear-gradient";
 
-function SignUpButton() {
-  return (
-    <View style={styles.container}>
-        <TouchableOpacity onPress={() => alert('Hello, world!')} style={styles.button}>
+function SignUpButton({ navigation }) {
+
+  return(
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <TouchableOpacity 
+        style={styles.button}
+        onPress={() => navigation.navigate('Home')}>
           <Text style={styles.buttonText}>Sign Up</Text>
         </TouchableOpacity>
     </View>
   );
+
 }
 
+
+
+
+
+
+/* 
+class SignUpButton extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const navigation = this.props.navigation;
+    return(
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <TouchableOpacity 
+          style={styles.button}
+          onPress={() => navigation.navigate('Home')}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+      </View>
+    );
+  }
+}
+ */
 const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#4267B2',
+    height: 42,
+    width: '70%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  buttonText: {
+    fontSize: 17,
+    color: 'white',
+  },
+})
+
+export default SignUpButton
+
+/* 
+
+function SignUpButton({ navigation }) {
+
+  const pressHandler = () => {
+    navigation.navigate('Home');
+  }
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button title='Sign Up' onPress={pressHandler} />
+    </View>
+  );
+} */
+/* 
+<TouchableOpacity onPress={pressHandler} style={styles.button}>
+//<Text style={styles.buttonText}>Sign Up</Text>
+</TouchableOpacity>
+ */
+/* const styles = StyleSheet.create({
     container: {
       flex: 1,
       backgroundColor: '#fff',
@@ -40,7 +103,4 @@ const styles = StyleSheet.create({
       fontSize: 20,
       color: '#fff',
     }, 
-  });
-
-
-export default SignUpButton
+  }); */

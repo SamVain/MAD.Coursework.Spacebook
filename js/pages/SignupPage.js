@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+
 import EnterFirstNameBox from '../components/inputBoxes/FirstNameInputBox';
 import ConfirmLastNameBox from '../components/inputBoxes/ConfirmLastNameBox';
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox';
@@ -10,7 +11,31 @@ import Title from '../components/misc/LoginSigninTitle';
 
 
 
+function SignupPage({ navigation }) {
+
+         return (
+            <View>
+               <Title />
+               <EnterFirstNameBox />
+               <ConfirmLastNameBox />
+               <EnterEmailBox />
+               <EnterPasswordBox />
+               <ConfirmPasswordBox />
+               <SignUpButton navigation={navigation}/>
+
+            </View>
+         ); 
+
+}
+
+
+
+
+/* 
 class SignupPage extends Component {
+   constructor(props) {
+      super(props);
+    }
    render(){
       return (
         <View>
@@ -24,6 +49,6 @@ class SignupPage extends Component {
         </View>
       );
     }
-}
+} */
 
 export default SignupPage
