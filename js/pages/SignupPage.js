@@ -9,22 +9,95 @@ import ConfirmPasswordBox from '../components/inputBoxes/ConfirmPasswordInputBox
 import SignUpButton from '../components/buttons/SignUpButton';
 import Title from '../components/misc/LoginSigninTitle';
 
+class SignupPage extends Component {
 
 
-function SignupPage({ navigation }) {
+   constructor(props){
+      super(props);
 
-   return (
-      <View style={styles.container}>
-         <Title />
-         <EnterFirstNameBox />
-         <ConfirmLastNameBox />
-         <EnterEmailBox />
-         <EnterPasswordBox />
-         <ConfirmPasswordBox />
-         <SignUpButton navigation={navigation}/>
-      </View>
-   ); 
+      this.state = {
+         firstName: '',
+         lastName: '',
+         email: '',
+         password: '',
+      };
+   }
 
+   register = () => {
+      let userDetails = {
+         first_name: this.state.firstName,
+         last_name: this.state.lastName,
+         email: this.state.email,
+         password: this.state.password,
+      };
+
+      return fetch('http://localhost:3333/api/1.0.0/user', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(userDetails),
+      })
+      .then((response) => {
+         if (response.status === 201) {
+           return response.json();
+         } else if (response.status === 400) {
+           throw 'Fill in the form in full, please try again!';
+         } else if (response.status === 401) {
+           throw 'Unauthorised!';
+         } else if (response.status === 403) {
+           throw 'Forbidden!';
+         } else if (response.status === 404) {
+           throw 'Not found!';
+         } else if (response.status === 500) {
+           throw 'Server error!';
+         } else {
+           throw 'Error, please try again!';
+         }
+       })
+       .then((responseJSON) => {
+          console.log('User created with ID: ', responseJSON);
+          this.props.navigation.navigate('LoginPage');
+       });
+   }
+
+   render() {
+      return (
+         <View style={styles.container}>
+            <Title />
+            <TextInput 
+               placeholder="First Name"
+               style={styles.input}
+               onChangeText={(firstName) => this.setState({firstName})}
+               value={this.state.first_name}
+            />
+            <TextInput 
+               placeholder="Last Name"
+               style={styles.input}
+               onChangeText={(lastName) => this.setState({lastName})}
+               value={this.state.last_name}
+            />
+            <TextInput 
+               placeholder="Email"
+               style={styles.input}
+               onChangeText={(email) => this.setState({email})}
+               value={this.state.email}
+            />
+            <TextInput 
+               placeholder="Password"
+               style={styles.input}
+               onChangeText={(password) => this.setState({password})}
+               value={this.state.password}
+               secureTextEntry={true}
+            />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.register()}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+         </View>
+      );
+   }
 }
 
 const styles = StyleSheet.create ({
@@ -57,6 +130,30 @@ const styles = StyleSheet.create ({
       fontSize: 20,
       color: '#fff',
     },
+    input: {
+      fontSize: 20,
+      color: '#fff',
+    },
 });
 
 export default SignupPage
+
+
+
+/* function SignupPage({ navigation }) {
+
+   return (
+      <View style={styles.container}>
+         <Title />
+         <EnterFirstNameBox />
+         <ConfirmLastNameBox />
+         <EnterEmailBox />
+         <EnterPasswordBox />
+         <ConfirmPasswordBox />
+         <SignUpButton navigation={navigation}/>
+      </View>
+   ); 
+
+}
+
+ */

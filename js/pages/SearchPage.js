@@ -6,8 +6,22 @@ import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet } from 'rea
 //import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import SearchPageSearchBar from "../components/searchPageComponents/SearchPageSearchBar";
 
+class SearchPage extends Component{
+    constructor(props) {
+        super(props);
+    }
+    render(){
+        return(
+            <View>
+                <SearchPageSearchBar />
+            </View>
+        )
+    }
+}
 
+export default SearchPage
 
+/* 
 function SearchPage({ navigation }) {
 
         return (
@@ -16,7 +30,7 @@ function SearchPage({ navigation }) {
             </View>
         ); 
 
-
+ */
 
 
 /*         return (
@@ -27,9 +41,3 @@ function SearchPage({ navigation }) {
         );  */
 
 
-
-7
-
-}
-
-export default SearchPage

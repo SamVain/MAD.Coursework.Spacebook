@@ -5,13 +5,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //import { LinearGradient } from 'expo-linear-gradient';
 import SpacebookPosts from '../components/homeComponents/SpacebookPosts'
 
-function HomePage({ navigation }) {
 
-        return (
-            <View>
-                <SpacebookPosts />
-            </View>
-        );
+class HomePage extends Component {
+  constructor(props){
+    super(props);
+  }
+  render() {
+    return(
+      <View>
+        <div>Home Page</div>
+      </View>
+    )
+  }
 }
 
 const styles = StyleSheet.create({ 
@@ -40,3 +45,9 @@ const styles = StyleSheet.create({
 });
 
 export default HomePage
+
+
+
+/* 
+function HomePage({ navigation })
+ */

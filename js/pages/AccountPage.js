@@ -4,17 +4,26 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 //import SpacebookHeader from '../components/SpacebookHeader'
 import SpacebookAvatar from '../components/AccountPageComponents/SpacebookAvatar'
 
-function AccountPage({ navigation }) {
+class AccountPage extends Component{
+  constructor(props){
+    super(props);
+  }
 
-    return (
-        <View>
-            <SpacebookAvatar />
-            <TouchableOpacity onPress={() => alert('TAKE ME HOOOMMMEEE YANITED ROAD')} style={styles.button}>
-                <Text style={styles.buttonText}>Log Out</Text>
-            </TouchableOpacity>
-        </View>
-    ); 
+  setLoggedIn = (value) => {
+    this.props.setLoggedIn(value);
+ }
 
+
+  render(){
+    return(
+      <View>
+        <SpacebookAvatar />
+        <TouchableOpacity onPress={() => this.setLoggedIn(false)} style={styles.button}>
+          <Text style={styles.buttonText}>Log Out</Text>
+        </TouchableOpacity>
+      </View>
+    ) 
+  }
 }
 
 const styles = StyleSheet.create({
@@ -44,3 +53,18 @@ const styles = StyleSheet.create({
   });
 
 export default AccountPage
+
+
+/* 
+function AccountPage({ navigation }) {
+
+    return (
+        <View>
+            <SpacebookAvatar />
+            <TouchableOpacity onPress={() => alert('TAKE ME HOOOMMMEEE YANITED ROAD')} style={styles.button}>
+                <Text style={styles.buttonText}>Log Out</Text>
+            </TouchableOpacity>
+        </View>
+    ); 
+
+} */
