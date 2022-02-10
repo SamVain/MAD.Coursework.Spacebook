@@ -11,7 +11,6 @@ import Title from '../components/misc/LoginSigninTitle';
 
 class SignupPage extends Component {
 
-
    constructor(props){
       super(props);
 
@@ -39,7 +38,7 @@ class SignupPage extends Component {
          body: JSON.stringify(userDetails),
       })
       .then((response) => {
-         if (response.status === 201) {
+         if (response.status === 200) {
            return response.json();
          } else if (response.status === 400) {
            throw 'Fill in the form in full, please try again!';
@@ -57,14 +56,16 @@ class SignupPage extends Component {
        })
        .then((responseJSON) => {
           console.log('User created with ID: ', responseJSON);
-          this.props.navigation.navigate('LoginPage');
+          this.props.navigation.navigate('Home');
+       })
+       .catch((error) => {
+          console.log(error);
        });
    }
 
    render() {
       return (
          <View style={styles.container}>
-            <Title />
             <TextInput 
                placeholder="First Name"
                style={styles.input}
@@ -105,10 +106,12 @@ const styles = StyleSheet.create ({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 20
+      justifyContent: 'top',
+      paddingTop: 20,
+      borderWidth: 0,
+      borderColor: 'black'
     },
-    instructions: {
+     instructions: {
       color: '#888',
       fontSize: 18,
       marginHorizontal: 15,
@@ -132,8 +135,8 @@ const styles = StyleSheet.create ({
     },
     input: {
       fontSize: 20,
-      color: '#fff',
-    },
+      color: '#0',
+    }, 
 });
 
 export default SignupPage

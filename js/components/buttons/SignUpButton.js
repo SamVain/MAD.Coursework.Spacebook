@@ -3,7 +3,6 @@ import { Button } from "react-native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 function SignUpButton({ navigation }) {
-
   return(
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity 
@@ -13,7 +12,6 @@ function SignUpButton({ navigation }) {
         </TouchableOpacity>
     </View>
   );
-
 }
 
 const styles = StyleSheet.create({
@@ -21,7 +19,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'top',
     paddingTop: 20
   },
   instructions: {

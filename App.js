@@ -8,7 +8,6 @@ import TabNavigator from './js/components/TabNavigator'
 import SpacebookHeader from './js/components/SpacebookHeader';
 import SigninTabNavigator from './js/components/SigninTabNavigator';
 import LoginPage from './js/pages/LoginPage';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -18,20 +17,15 @@ This is the entry point for the application
 */
 const Stack = createNativeStackNavigator();
 //const Tab = createMaterialTopTabNavigator();
-
 class App extends Component {
-
   render() {
     return (
-
       <>
         <div>
           <SpacebookHeader/>
           <TabNavigator/>
         </div>
-
       </>
-
     )
   }
 }

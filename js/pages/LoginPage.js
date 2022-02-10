@@ -10,7 +10,6 @@ import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import SignInButton from '../components/buttons/SignInButton';
 import Title from '../components/misc/LoginSigninTitle';
 import HomePage from './HomePage';
-
 import AsyncStorge from '@react-native-async-storage/async-storage';
 
 /*
@@ -20,8 +19,6 @@ and password is displayed in a chrome drop-down message. The CSS put in here als
 the log in page have facebook colour's. The CSS will need its own file and then importing
 into here. Best Practice :)
 */
-
-
 
 class LoginPage extends Component {
 
@@ -39,8 +36,8 @@ class LoginPage extends Component {
       this.props.setLoggedIn(value);
    }
 
-   handleEmailInput = (value) => this.setState({email:value});
-   handlePasswordInput = (value) => this.setState({password:value});
+   //handleEmailInput = (value) => this.setState({email:value});
+   //handlePasswordInput = (value) => this.setState({password:value});
 
    login = async () => {
 
@@ -74,45 +71,46 @@ class LoginPage extends Component {
       })
       .then(async (responseJSON) => {
 
-         console.log("id : " + responseJSON.id);
-         console.log("token : " + responseJSON.token);
 
-         await AsyncStorge.setItem('@session_token', responseJSON.token);
-         await AsyncStorge.setItem('@id', JSON.stringify(responseJSON.id));
+         await AsyncStorge.setItem('@session_token', responseJSON.token)
+         .catch(error => {
+            console.log(error);
+            return;
+         });
 
+         await AsyncStorge.setItem('@id', JSON.stringify(responseJSON.id))
+         .catch(error => {
+            console.log(error);
+            return;
+         });
          
          this.setLoggedIn(true);
          //this.props.navigation.navigate('Home');
-
       })
       .catch((error) => {
 
          console.log(error);
       });
-
    } 
 
    render() {
-
       return (
-         <>
-            <View style={styles.container}>
-               <Title />
-               <TextInput 
-                  placeholder="E-Mail"
-                  onChangeText={this.handleEmailInput}
-               />
-               <TextInput 
-                  placeholder="Password"
-                  onChangeText={this.handlePasswordInput}
-                  secureTextEntry={true}
-               />
-               <SignInButton login={this.login}/>
-               <Text style={ styles.text }>
-                  Not Got An Account? Sign Up Above!
-               </Text>
-            </View>
-         </>
+         <View style={styles.container}>
+
+            <TextInput 
+               placeholder="E-Mail"
+               onChangeText={(email) => this.setState({email:email})}
+            />
+            <TextInput 
+               placeholder="Password"
+               onChangeText={(password) => this.setState({password:password})}
+               secureTextEntry={true}
+            />
+            <SignInButton login={this.login}/>
+            <Text style={ styles.text }>
+               Not Got An Account? Sign Up Above!
+            </Text>
+         </View>
       );
 
    }
@@ -123,10 +121,12 @@ const styles = StyleSheet.create ({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 20
+      justifyContent: 'top',
+      paddingTop: 20,
+      borderWidth: 0,
+      borderColor: 'black'
     },
-    instructions: {
+     instructions: {
       color: '#888',
       fontSize: 18,
       marginHorizontal: 15,
@@ -148,6 +148,10 @@ const styles = StyleSheet.create ({
       fontSize: 20,
       color: '#fff',
     },
+    input: {
+      fontSize: 20,
+      color: '#fff',
+    }, 
 });
 
 

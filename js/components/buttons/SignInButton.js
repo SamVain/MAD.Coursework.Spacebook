@@ -14,22 +14,17 @@ import { Button, ButtonGroup, withTheme, Text } from 'react-native-elements';
             token: '',
         };
     }
-    
 
-//  const {name, login} = props;
-/* 
-  const [count, setCount] = useState(0);
-  const onPress = () => setCount(prevCount => prevCount + 1); */
     render(){
-    return (
-      <View style={styles.container}>
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={() => this.props.login()}>
-            <Text style={styles.buttonText}>Sign In</Text>
-          </TouchableOpacity>
-      </View>
-    );
+      return (
+        <View style={styles.container}>
+            <TouchableOpacity 
+              style={styles.button}
+              onPress={() => this.props.login()}>
+              <Text style={styles.buttonText}>Sign In</Text>
+            </TouchableOpacity>
+        </View>
+      );
   }
 }
 
@@ -38,8 +33,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 20
+    justifyContent: 'top',
+    paddingTop: 20,
+    borderWidth: 0,
+    borderColor: 'black'
   },
   instructions: {
     color: '#888',
