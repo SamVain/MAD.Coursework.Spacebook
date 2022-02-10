@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {View, TextInput, ScrollView, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import SpacebookHeader from './components/SpacebookHeader'
+import AccountPage from './pages/AccountPage'; 
 
-class UpdateUserInfo extends Component {
+class Settings extends Component {
 
     constructor(props) {
         super(props);
@@ -23,12 +24,12 @@ class UpdateUserInfo extends Component {
     //This function will pre-populate the User Details fields with the existing details
 
     getInfo = async () => {
-        const userToken = await AsyncStorage.getItem('@session_token');
+        const token = await AsyncStorage.getItem('@session_token');
         const userID = await AsyncStorage.getItem('@id')
-        return fetch('http://localhost:3333/api/1.0.0/user' + userID, {
+        return fetch('http://localhost:3333/api/1.0.0/user/' + userID, {
             headers: {
                 'content-Type': 'application/json',
-                'X-Authorization': userToken
+                'X-Authorization': token
             },
         })
         .then((response) => {
@@ -61,7 +62,7 @@ class UpdateUserInfo extends Component {
     };
 
     updateInfo = async () => {
-        const userToken = await AsyncStorage.getItem('@session_token');
+        const token = await AsyncStorage.getItem('@session_token');
         const userID = await AsyncStorage.getItem('@id')
         let userDetails = {
             first_name: this.state.firstName,
@@ -69,18 +70,17 @@ class UpdateUserInfo extends Component {
             email: this.state.email,
             password: this.state.password,
         };
-        return fetch ('http://localhost:3333/api/1.0.0/user' + userID, {
+        return fetch ('http://localhost:3333/api/1.0.0/user/' + userID, {
           method: 'PATCH',
           headers: {
             'content-Type': 'application/json',
-            'X-Authorization': userToken,
+            'X-Authorization': token,
           },
           body: JSON.stringify(userDetails),
         })
         .then((response) => {
           if (response.status === 200) {
-            ToastAndroid.show('Account Details Updated!');
-            this.props.navigation.navigate('MyAccount');
+            console.log("USER DETAILS UPDATED!!!!!!")
           } else if (response.status === 400) {
             throw 'Invalid details, please try again!';
           } else if (response.status === 401) {
@@ -99,11 +99,11 @@ class UpdateUserInfo extends Component {
           console.log(error);
         });
     };
+    
     render() {
       return (
         <View>
           <ScrollView>
-            <SpacebookHeader />
             <TextInput 
               placeholder="First Name"
               style = {styles.input}
@@ -178,4 +178,4 @@ const styles = StyleSheet.create ({
    }, 
 });
 
-export default UpdateUserInfo
+export default Settings

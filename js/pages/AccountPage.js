@@ -4,7 +4,6 @@ import SpacebookAvatar from '../components/AccountPageComponents/SpacebookAvatar
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import UpdateUserInfo from '../UpdateUserInfo';
 
 
 class AccountPage extends Component {
@@ -139,11 +138,6 @@ class AccountPage extends Component {
               onPress={() => this.logout()}>
                   <Text style={styles.buttonText}>Log Out</Text>
             </TouchableOpacity>
-            <TouchableOpacity 
-              style={styles.button}
-              onPress={() => this.props.navigation.navigate('UpdateUserInfo')}>
-                <Text style={styles.buttonText}>Update Account</Text>
-              </TouchableOpacity>
           </View>
       )
     }

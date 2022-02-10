@@ -9,6 +9,7 @@ import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import AccountPage from '../pages/AccountPage';
 import SearchPage from '../pages/SearchPage';
+import Settings from '../SettingsPage'
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -42,6 +43,7 @@ class TabNavigator extends Component {
                 <AccountPage setLoggedIn={this.setLoggedIn} />
               )}
               </Tab.Screen>
+              <Tab.Screen name="Settings" component={Settings} />
             </Tab.Navigator> 
 
             :
