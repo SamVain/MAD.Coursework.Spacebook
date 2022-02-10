@@ -53,24 +53,3 @@ const styles = StyleSheet.create ({
   });
 
 export default SearchPage
-
-/* 
-function SearchPage({ navigation }) {
-
-        return (
-            <View>
-                <SearchPageSearchBar />
-            </View>
-        ); 
-
- */
-
-
-/*         return (
-            <View>
-                <SpacebookHeader navigation={navigation}/>
-                <SearchPageSearchBar />
-            </View>
-        );  */
-
-

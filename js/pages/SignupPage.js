@@ -140,23 +140,3 @@ const styles = StyleSheet.create ({
 });
 
 export default SignupPage
-
-
-
-/* function SignupPage({ navigation }) {
-
-   return (
-      <View style={styles.container}>
-         <Title />
-         <EnterFirstNameBox />
-         <ConfirmLastNameBox />
-         <EnterEmailBox />
-         <EnterPasswordBox />
-         <ConfirmPasswordBox />
-         <SignUpButton navigation={navigation}/>
-      </View>
-   ); 
-
-}
-
- */

@@ -36,11 +36,7 @@ class LoginPage extends Component {
       this.props.setLoggedIn(value);
    }
 
-   //handleEmailInput = (value) => this.setState({email:value});
-   //handlePasswordInput = (value) => this.setState({password:value});
-
    login = async () => {
-
       return fetch('http://localhost:3333/api/1.0.0/login', {
          method: 'POST',
          headers: {
@@ -96,7 +92,6 @@ class LoginPage extends Component {
    render() {
       return (
          <View style={styles.container}>
-
             <TextInput 
                placeholder="E-Mail"
                onChangeText={(email) => this.setState({email:email})}
@@ -112,7 +107,6 @@ class LoginPage extends Component {
             </Text>
          </View>
       );
-
    }
 }
 
@@ -154,93 +148,4 @@ const styles = StyleSheet.create ({
     }, 
 });
 
-
 export default LoginPage
-
-
-
-
-/* 
-
-function LoginPage() {
-
-   const [email, setEmail] = useState('');
-   const [password, setPassword] = useState('');
-   const [token, setToken] = useState('');
-
-   const { signIn } = useContext(AuthContext);
-
-   const handleEmailInput = (email) => setEmail(email);
-   const handlePasswordInput = (password) => setPassword(password);
-
-   const login = async () => {
-
-      return fetch('http://localhost:3333/api/1.0.0/login', {
-         method: 'POST',
-         headers: {
-            'Content-Type' : 'application/json',
-         },
-         body: JSON.stringify({
-            "email": email,
-            "password": password
-          }),
-      })
-      .then((response) => {
-         
-         if (response.status === 200) {
-            return response.json();
-         } else if (response.status === 400) {
-            throw 'Invalid email or password, please try again!';
-         } else if (response.status === 401) {
-            throw 'Unauthorised!';
-          } else if (response.status === 403) {
-            throw 'Forbidden!';
-          } else if (response.status === 404) {
-            throw 'Not found!';
-          } else if (response.status === 500) {
-            throw 'Server error!';
-          } else {
-            throw 'Error, please try again!';
-          }
-      })
-      .then(async (responseJSON) => {
-
-         console.log("id : " + responseJSON.id);
-         console.log("token : " + responseJSON.token);
-
-         await AsyncStorge.setItem('@session_token', responseJSON.token);
-         await AsyncStorge.setItem('@id', JSON.stringify(responseJSON.id));
-
-         //navigation.navigate('HomePage');
-
-      })
-      .catch((error) => {
-
-         console.log(error);
-      });
-   
-   }
-
-
-
-   return (
-      <View style={styles.container}>
-         <Title />
-         <TextInput 
-            placeholder="E-Mail"
-            onChangeText={handleEmailInput}
-         />
-         <TextInput 
-            placeholder="Password"
-            onChangeText={handlePasswordInput}
-            secureTextEntry={true}
-         />
-         <SignInButton login={login}/>
-         <Text style={ styles.text }>
-            Not Got An Account? Sign Up Above!
-         </Text>
-      </View>
-   );
-}
-
- */

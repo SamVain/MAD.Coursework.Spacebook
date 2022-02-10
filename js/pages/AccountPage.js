@@ -43,17 +43,15 @@ class AccountPage extends Component {
             'X-Authorization': this.state.token,
         },
     })
+
     .then(async (response) => {
-
         if (response.status === 200) {
-
           await AsyncStorage.removeItem('@session_token')
               .then(data => this.setLoggedIn(false))
               .catch(error => {
                   console.log(error);
                   return;
               });
-
         } else if (response.status === 400) {
           throw 'Bad request!';
         } else if (response.status === 401) {
@@ -69,13 +67,11 @@ class AccountPage extends Component {
         }
       })
       .catch((error) => {
-
         console.log(error);
       });
   };
 
   getInfo = async () => {
-
     await AsyncStorage.getItem('@session_token')
         .then(data => this.setState({token: data}))
         .catch(error => {
@@ -89,7 +85,6 @@ class AccountPage extends Component {
             console.log(error);
             return;
         });
-
 
     return fetch('http://localhost:3333/api/1.0.0/user/' + this.state.userId, {
       headers: {
@@ -178,24 +173,3 @@ const styles = StyleSheet.create ({
 });
 
 export default AccountPage
-
-
-/* 
-function AccountPage({ navigation }) {
-
-    return (
-        <View>
-            <SpacebookAvatar />
-            <TouchableOpacity onPress={() => alert('TAKE ME HOOOMMMEEE YANITED ROAD')} style={styles.button}>
-                <Text style={styles.buttonText}>Log Out</Text>
-            </TouchableOpacity>
-        </View>
-    ); 
-
-} */
-
-/*   setLoggedIn = (value) => {
-    this.props.setLoggedIn(value);
- } */
-
-{/* <SpacebookAvatar /> */}
