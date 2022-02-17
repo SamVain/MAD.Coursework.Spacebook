@@ -31,3 +31,13 @@ class App extends Component {
 }
 
 export default App;
+
+
+/* NOTES */
+
+/*
+Due to the API, a central feed like Facebook is not possible
+
+
+
+*/
