@@ -1,44 +1,63 @@
 import React, { Component } from 'react'
-import { SearchBar } from "react-native-elements";
-import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, FlatList } from 'react-native'
+import { SearchBar, ListItem } from "react-native-elements";
+import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, FlatList, SafeAreaView, TouchableHighlight } from 'react-native'
 import SearchPageSearchBar from "../components/searchPageComponents/SearchPageSearchBar";
 import AccountPage from './AccountPage';
-import AsyncStorge from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class SearchPage extends Component{
     
     constructor(props) {
         super(props);
         this.state = {
-          UserData: [],
+          UserData: {},
           userId: 0,
           firstName: '',
           lastName: '',
           email:'',
-          search:'',
+          searchTerm:'',
+          token: ''
       };
     }
 
-    //get user details of search query
-    getuser = () => {
-      return fetch('http://10.0.2.2:3333/api/1.0.0/search?q=' + this.state.search + '&search_in=all&limit=20&offset=0')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          'Content-Type': 'application/json',
-          UserData: responseJson,
-          'X-Authorization': token,
+    getuser = async () => {
+      
+      await AsyncStorage.getItem('@session_token')
+        .then(data => this.setState({token: data}))
+        .catch(error => {
+            console.log(error);
+            return;
         });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    }
-    
-    componentDidMount(){
-        this.getuser();
-    }
 
+        var url = '';
+
+        if (this.state.searchTerm.length > 0) {
+          url = 'http://127.0.0.1:3333/api/1.0.0/search?q=' + this.state.searchTerm + '&search_in=all&limit=10&offset=0'
+        }
+        else {
+          url = 'http://127.0.0.1:3333/api/1.0.0/search?search_in=all&limit=10&offset=0'
+        }
+
+        return fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-Authorization': this.state.token,
+        },
+      })           
+      .then(
+
+        response => response.json()
+      )
+      .then(responseJson => 
+
+        this.setState({UserData: responseJson})
+      )
+      .catch(error => 
+
+        console.log(error)
+      );
+    }
+  
     saveId = async(userID) => {
         try{
             await AsyncStorage.setItem('UserID', JSON.stringify(userID));
@@ -47,42 +66,48 @@ class SearchPage extends Component{
             console.log(error);
         }
     }
+
+    renderItem = ({ item }) => (
+      <Item title={item.title} description={item.description} />
+    );
     
     render() {
         return(
-            <div>
+          <div>
+            <SearchBar
+              platform='android'
+              round
+              searchIcon={() => {true;} }
+              placeholder="Search"
+              value={this.state.searchTerm}
+              onChangeText={(search) => this.setState({ searchTerm: search })}
+            />
 
-              <SearchBar
-                platform='android'
-                round
-                searchIcon={() => {true;} }
-                placeholder="Search"
-                value={this.state.search}
-                onChangeText={(search) => this.setState({ search })}
-              />
+            <Button
+              accessible={true}
+              title="Search"
+              onPress={() => {
+
+                this.getuser()
+
+                console.log("pressed")
               
-              <Button
-                accessible={true}
-                title="Search"
-                onPress={() =>{
-                  this.getuser()
-                  console.log("pressed")
-                }}
-                />
+              }
+            }
+            />         
 
-                <FlatList>
-                  data={this.state.UserData}
-                  renderItem={({ item, index }) =>
-                    <TouchableOpacity>
-                      style={styles.button}
-                      onPress={() => {
-                        this.props.navigation.navigate('AccountPage'),
-                        this.saveId(item.user_id);
-                      }}
-                    </TouchableOpacity>
-                  }
-                </FlatList>
-            </div>
+            <SafeAreaView style={styles.container}>
+              <FlatList 
+                data={this.state.UserData}
+                renderItem={({item,index}) => 
+                <View style={styles.row}>
+                  <Text style={styles.item}> {item.user_givenname} {item.user_familyname}</Text>
+                </View>}              
+                enableEmptySections={true}
+                keyExtractor={(item,index) => item.user_id}
+              />
+            </SafeAreaView>
+          </div>
         );
     }
 }
@@ -119,6 +144,14 @@ const styles = StyleSheet.create ({
        fontSize: 20,
        color: '#fff',
      },
+     item: {
+      backgroundColor: '#fff',
+      borderColor: '#black',
+      borderWidth: 1,
+      padding: 20,
+      marginVertical: 8,
+      marginHorizontal: 16,
+    },
   });
 
 export default SearchPage
