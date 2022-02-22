@@ -16,7 +16,8 @@ class SearchPage extends Component{
           lastName: '',
           email:'',
           searchTerm:'',
-          token: ''
+          token: '',
+          selectedId: 0
       };
     }
 
@@ -67,10 +68,20 @@ class SearchPage extends Component{
         }
     }
 
-    renderItem = ({ item }) => (
-      <Item title={item.title} description={item.description} />
-    );
-    
+    renderItem2 = (item) => 
+        <Item
+          item={item}
+          onPress={() => this.setState({selectedId: item.user_id})}
+          backgroundColor={ item.user_id === this.state.selectedId ? "#6e3b6e" : "#f9c2ff" }
+          textColor={ item.user_id === this.state.selectedId ? 'white' : 'black' }
+        />
+
+
+    renderItem = (item) => 
+    <View style={styles.row}> 
+      <Text style={styles.item}> {item.user_givenname} {item.user_familyname}</Text>
+    </View>
+
     render() {
         return(
           <div>
@@ -89,24 +100,33 @@ class SearchPage extends Component{
               onPress={() => {
 
                 this.getuser()
-
                 console.log("pressed")
               
-              }
-            }
+              }}
             />         
 
             <SafeAreaView style={styles.container}>
               <FlatList 
                 data={this.state.UserData}
-                renderItem={({item,index}) => 
-                <View style={styles.row}>
-                  <Text style={styles.item}> {item.user_givenname} {item.user_familyname}</Text>
-                </View>}              
-                enableEmptySections={true}
-                keyExtractor={(item,index) => item.user_id}
+                renderItem={({item}) => 
+
+                  <div>
+                    <TouchableOpacity
+                      onPress={() => this.setState({selectedId: item.user_id})}
+                    >
+                    <View style={styles.view}>
+                      <Text style={ item.user_id === this.state.selectedId ? styles.text : styles.selected }>
+                        {item.user_givenname}
+                      </Text>
+                    </View>
+                    </TouchableOpacity>
+                  </div>
+
+                }
+                keyExtractor={(item) => item.user_id}
               />
             </SafeAreaView>
+
           </div>
         );
     }
@@ -132,9 +152,18 @@ const styles = StyleSheet.create ({
        fontSize: 15,
        fontWeight: 'bold',
        textAlign: 'center',
-       color: "#4267B2",
+       color: "white",
+       backgroundColor: "black",
        paddingTop: 30
     },
+    selected: {
+      fontSize: 15,
+      fontWeight: 'bold',
+      textAlign: 'center',
+      color: "black",
+      backgroundColor: "white",
+      paddingTop: 30
+   },
     button: {
        backgroundColor: "#4267B2",
        padding: 20,
