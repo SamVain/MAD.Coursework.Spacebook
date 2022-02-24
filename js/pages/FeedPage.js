@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import SpacebookPosts from '../components/homeComponents/SpacebookPosts'
 
 
-class HomePage extends Component {
+class FeedPage extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -47,7 +47,7 @@ class HomePage extends Component {
   render() {
     return(
       <View style={styles.container}>
-        <Text>Bollox</Text>
+        <Text>Feed Page!</Text>
       </View>
     )
   }
@@ -88,7 +88,7 @@ const styles = StyleSheet.create ({
    },
 });
 
-export default HomePage
+export default FeedPage
 
 
 

@@ -4,6 +4,7 @@ import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, FlatList, 
 import SearchPageSearchBar from "../components/searchPageComponents/SearchPageSearchBar";
 import AccountPage from './AccountPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//import { useNavigation } from '@react-navigation/native'
 
 class SearchPage extends Component{
     
@@ -20,6 +21,8 @@ class SearchPage extends Component{
           selectedId: 0
       };
     }
+
+
 
     getuser = async () => {
       
@@ -68,13 +71,13 @@ class SearchPage extends Component{
         }
     }
 
-    renderItem2 = (item) => 
-        <Item
-          item={item}
-          onPress={() => this.setState({selectedId: item.user_id})}
-          backgroundColor={ item.user_id === this.state.selectedId ? "#6e3b6e" : "#f9c2ff" }
-          textColor={ item.user_id === this.state.selectedId ? 'white' : 'black' }
-        />
+    // renderItem2 = (item) => 
+    //     <Item
+    //       item={item}
+    //       onPress={() => this.setState({selectedId: item.user_id})}
+    //       backgroundColor={ item.user_id === this.state.selectedId ? "#6e3b6e" : "#f9c2ff" }
+    //       textColor={ item.user_id === this.state.selectedId ? 'white' : 'black' }
+    //     />
 
 
     renderItem = (item) => 
@@ -82,7 +85,14 @@ class SearchPage extends Component{
       <Text style={styles.item}> {item.user_givenname} {item.user_familyname}</Text>
     </View>
 
+    navigateAway = (to, userId) => {
+
+      this.props.navigation.navigate(to, {userId: userId})
+
+    }
+
     render() {
+
         return(
           <div>
             <SearchBar
@@ -109,24 +119,23 @@ class SearchPage extends Component{
               <FlatList 
                 data={this.state.UserData}
                 renderItem={({item}) => 
-
                   <div>
                     <TouchableOpacity
-                      onPress={() => this.setState({selectedId: item.user_id})}
+                      //onPress={() => console.log("user was pressed")}
+                      //onPress={() => this.setState({selectedId: item.user_id})}
+                      onPress={() => this.navigateAway('Account', item.user_id)}
                     >
                     <View style={styles.view}>
                       <Text style={ item.user_id === this.state.selectedId ? styles.text : styles.selected }>
-                        {item.user_givenname}
+                        {item.user_givenname} {item.user_familyname}
                       </Text>
                     </View>
-                    </TouchableOpacity>
-                  </div>
-
+                  </TouchableOpacity>
+                </div>
                 }
                 keyExtractor={(item) => item.user_id}
               />
             </SafeAreaView>
-
           </div>
         );
     }
@@ -152,8 +161,8 @@ const styles = StyleSheet.create ({
        fontSize: 15,
        fontWeight: 'bold',
        textAlign: 'center',
-       color: "white",
-       backgroundColor: "black",
+       color: "black",
+       backgroundColor: "#888",
        paddingTop: 30
     },
     selected: {

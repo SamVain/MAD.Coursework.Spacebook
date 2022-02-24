@@ -10,6 +10,7 @@ import SignupPage from '../pages/SignupPage';
 import AccountPage from '../pages/AccountPage';
 import SearchPage from '../pages/SearchPage';
 import Settings from '../SettingsPage'
+import FeedPage from '../pages/FeedPage';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -36,7 +37,7 @@ class TabNavigator extends Component {
           { this.state.isLoggedIn ? 
 
             <Tab.Navigator initialRouteName="Home">
-              <Tab.Screen name="Home" component={HomePage} />              
+              <Tab.Screen name="Feed" component={FeedPage} />              
               <Tab.Screen name="Search" component={SearchPage} />
               <Tab.Screen name="Account" >
               {props => (

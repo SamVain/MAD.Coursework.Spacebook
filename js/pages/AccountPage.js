@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button} from 'react-native'
 import SpacebookAvatar from '../components/AccountPageComponents/SpacebookAvatar'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+//import { NavigationContainer } from '@react-navigation/native';
+//import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 class AccountPage extends Component {
@@ -17,14 +18,21 @@ class AccountPage extends Component {
       lastName: '',
       email: '',
       token: '',
-      userId: 0
+      userId: 0 //props.navigation.userId
     };
   }
 
   componentDidMount() {
+  
     this.getInfo();
   }
 
+  componentDidUpdate() {
+
+    console.log('componentDidUpdate');
+
+  } 
+  
   setLoggedIn = (value) => {
     this.props.setLoggedIn(value);
   } 
@@ -86,7 +94,9 @@ class AccountPage extends Component {
             return;
         });
 
-    return fetch('http://localhost:3333/api/1.0.0/user/' + this.state.userId, {
+    var url = 'http://localhost:3333/api/1.0.0/user/' + this.state.userId
+
+    return fetch(url, {
       headers: {
         'Content-Type': 'application/json',
         'X-Authorization': this.state.token
@@ -122,20 +132,59 @@ class AccountPage extends Component {
       });
   };
 
-  render() {
-       return (
-          <View style={styles.container}>
-            <Text style={styles.title}>Account Details</Text>
-            <Text style={styles.label}>Name: {this.state.firstName} {this.state.lastName}</Text>
-            <Text style={styles.label}>Email: {this.state.email}</Text>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => this.logout()}>
-                  <Text style={styles.buttonText}>Log Out</Text>
-            </TouchableOpacity>
-          </View>
-      )
+  getfriends() {
+
+    var url = '';
+
+    if (this.props.route.params.userId === null) {
+      url = 'http://localhost:3333/api/1.0.0/user/' + this.state.userId + '/friends'
     }
+    else {
+      url = 'http://localhost:3333/api/1.0.0/user/' + this.state.userId + '/friends'
+    }
+
+    return fetch(url, + '/friends', {
+      method: "GET"
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+        this.setState({
+            isLoading: false,
+            friends: responseJson,
+        });
+        console.log("friends", this.state.listOfFriends);
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+  render() {
+    
+    //const { pId, textParam } = this.props.route.userId;
+    //const name = useNavigationParam('userId');
+
+    return (
+      <>
+
+        <View style={styles.container}>
+
+        {/* <Text style={styles.myStyle}>UserId: {this.props.navigation.state.params.userId}</Text> */}
+
+          <Text style={styles.title}>Account Details</Text>
+          <Text style={styles.label}>Name: {this.state.firstName} {this.state.lastName}</Text>
+          <Text style={styles.label}>Email: {this.state.email}</Text>
+          <Text style={styles.label}>List of Friends: {this.state.getfriends}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.logout()}>
+                <Text style={styles.buttonText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
+      </>
+
+    )
+  }
 }
 
 const styles = StyleSheet.create ({
@@ -172,4 +221,4 @@ const styles = StyleSheet.create ({
    },
 });
 
-export default AccountPage
+export default AccountPage;
