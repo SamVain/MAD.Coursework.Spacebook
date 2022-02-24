@@ -12,7 +12,6 @@ class FeedPage extends Component {
     this.state = {
       isLoading: true,
       postData: [],
-
       post_id: 0,
       timestamp: 0,
       post_content: '',
@@ -89,9 +88,3 @@ const styles = StyleSheet.create ({
 });
 
 export default FeedPage
-
-
-
-/* 
-function HomePage({ navigation })
- */

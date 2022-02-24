@@ -123,7 +123,7 @@ class SearchPage extends Component{
                     <TouchableOpacity
                       //onPress={() => console.log("user was pressed")}
                       //onPress={() => this.setState({selectedId: item.user_id})}
-                      onPress={() => this.navigateAway('Account', item.user_id)}
+                      onPress={() => this.navigateAway('Feed', item.user_id)}
                     >
                     <View style={styles.view}>
                       <Text style={ item.user_id === this.state.selectedId ? styles.text : styles.selected }>

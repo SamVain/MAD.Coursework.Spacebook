@@ -39,7 +39,7 @@ class TabNavigator extends Component {
             <Tab.Navigator initialRouteName="Home">
               <Tab.Screen name="Feed" component={FeedPage} />              
               <Tab.Screen name="Search" component={SearchPage} />
-              <Tab.Screen name="Account" >
+              <Tab.Screen name="My Account" >
               {props => (
                 <AccountPage setLoggedIn={this.setLoggedIn} />
               )}
