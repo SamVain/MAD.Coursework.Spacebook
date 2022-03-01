@@ -20,7 +20,7 @@ class TabNavigator extends Component {
     super(props);
 
     this.state = {
-      isLoggedIn: false
+      isLoggedIn: false,
     };
   }
 
@@ -36,15 +36,20 @@ class TabNavigator extends Component {
 
           { this.state.isLoggedIn ? 
 
-            <Tab.Navigator initialRouteName="Home">
-              <Tab.Screen name="Feed" component={FeedPage} />              
-              <Tab.Screen name="Search" component={SearchPage} />
+            <Tab.Navigator initialRouteName="Search">
+
+              <Tab.Screen name="Search" component={SearchPage}></Tab.Screen>
+
+              <Tab.Screen name="Feed" component={FeedPage}></Tab.Screen>
+
               <Tab.Screen name="My Account" >
               {props => (
                 <AccountPage setLoggedIn={this.setLoggedIn} />
               )}
               </Tab.Screen>
-              <Tab.Screen name="Settings" component={Settings} />
+
+              <Tab.Screen name="Settings" component={Settings}></Tab.Screen>
+
             </Tab.Navigator> 
 
             :
@@ -52,10 +57,12 @@ class TabNavigator extends Component {
             <Tab.Navigator initialRouteName="Login">
               <Tab.Screen  name="Login">
               {props => (
-                <LoginPage setLoggedIn={this.setLoggedIn} />
+                <LoginPage 
+                setLoggedIn={this.setLoggedIn} />
               )}
               </Tab.Screen>
-              <Tab.Screen name="Signup" component={SignupPage} />    
+              <Tab.Screen name="Signup" component={SignupPage}></Tab.Screen>
+              
             </Tab.Navigator>
           }
       </NavigationContainer>

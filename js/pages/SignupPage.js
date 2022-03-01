@@ -30,7 +30,7 @@ class SignupPage extends Component {
          password: this.state.password,
       };
 
-      return fetch('http://localhost:3333/api/1.0.0/user', {
+      return fetch('http://127.0.0.1:3333/api/1.0.0/user', {
          method: 'POST',
          headers: {
             'Content-Type': 'application/json',

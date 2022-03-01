@@ -2,14 +2,80 @@ import React, { Component } from 'react'
 import { SearchBar, ListItem } from "react-native-elements";
 import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, FlatList, SafeAreaView, TouchableHighlight } from 'react-native'
 import SearchPageSearchBar from "../components/searchPageComponents/SearchPageSearchBar";
-import AccountPage from './AccountPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-//import { useNavigation } from '@react-navigation/native'
 
-class SearchPage extends Component{
+class FlatListItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userId: 0,
+    };
+  }
+
+  getUserId = async () => {
+
+    await AsyncStorage.getItem('@id')
+      .then(data => this.setState({userId: JSON.parse(data)}))
+      .catch(error => {
+          console.log(error);
+          return;
+      });
+
+  }
+
+  componentDidMount() {
+
+    console.log('FlatListItem: componentDidMount');
+
+    this.getUserId();
+    
+  }
+
+  navigateAway = (to, userId) => {
+
+    this.props.navigation.navigate(to, {userId: userId})
+    //this.props
+    console.log('navigateAway');
+
+  }
+
+  render() {
+
+    if (this.props.item.user_id !== this.state.userId) {
+    
+      return(
+ 
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{ justifyContent: 'flex-start'}}>
+          <TouchableOpacity onPress={() => this.navigateAway('Feed', this.props.item.user_id)}>
+            <Text style={this.props.item.user_id === this.state.selectedId ? styles.buttonText : styles.selected }>
+              <Text style={styles.text}>{this.props.item.user_givenname} {this.props.item.user_familyname}</Text>
+            </Text>   
+          </TouchableOpacity>
+        </View>
+        <View style={{ justifyContent: 'flex-end'}}>
+          <TouchableOpacity style={styles.button} onPress={() => console.log("Button Pressed!!")}>
+            <Text style={styles.buttonText}>Add Frend</Text>
+          </TouchableOpacity> 
+        </View>
+      </View>
+
+      );
+    
+    } else {
+    
+      return(
+        <></>
+      );
+    }
+  }
+}
+
+class SearchPage extends Component {
     
     constructor(props) {
         super(props);
+
         this.state = {
           UserData: {},
           userId: 0,
@@ -23,9 +89,19 @@ class SearchPage extends Component{
     }
 
 
+    getUserId = async () => {
 
-    getuser = async () => {
-      
+      await AsyncStorage.getItem('@id')
+        .then(data => this.setState({userId: data}))
+        .catch(error => {
+            console.log(error);
+            return;
+        });
+
+    }
+
+    getToken = async () => {
+
       await AsyncStorage.getItem('@session_token')
         .then(data => this.setState({token: data}))
         .catch(error => {
@@ -33,6 +109,22 @@ class SearchPage extends Component{
             return;
         });
 
+    }
+
+
+    componentDidMount() {
+ 
+      console.log('SearchPage: componentDidMount');
+
+      this.getUserId();
+
+      this.getToken();
+
+    }
+
+
+    getuser = async () => {
+      
         var url = '';
 
         if (this.state.searchTerm.length > 0) {
@@ -61,37 +153,15 @@ class SearchPage extends Component{
         console.log(error)
       );
     }
-  
-    saveId = async(userID) => {
-        try{
-            await AsyncStorage.setItem('UserID', JSON.stringify(userID));
-            console.log(JSON.stringify(userID));      
-        } catch(error) {
-            console.log(error);
-        }
-    }
 
-    // renderItem2 = (item) => 
-    //     <Item
-    //       item={item}
-    //       onPress={() => this.setState({selectedId: item.user_id})}
-    //       backgroundColor={ item.user_id === this.state.selectedId ? "#6e3b6e" : "#f9c2ff" }
-    //       textColor={ item.user_id === this.state.selectedId ? 'white' : 'black' }
-    //     />
-
-
-    renderItem = (item) => 
-    <View style={styles.row}> 
-      <Text style={styles.item}> {item.user_givenname} {item.user_familyname}</Text>
-    </View>
-
-    navigateAway = (to, userId) => {
-
-      this.props.navigation.navigate(to, {userId: userId})
-
-    }
-
+    renderItem = (item) =>
+    <div>
+      <FlatListItem item={item} navigation={this.props.navigation}/>
+    </div>
+    
     render() {
+
+      console.log("Rendering SearchPage");
 
         return(
           <div>
@@ -110,29 +180,13 @@ class SearchPage extends Component{
               onPress={() => {
 
                 this.getuser()
-                console.log("pressed")
-              
               }}
             />         
 
             <SafeAreaView style={styles.container}>
               <FlatList 
                 data={this.state.UserData}
-                renderItem={({item}) => 
-                  <div>
-                    <TouchableOpacity
-                      //onPress={() => console.log("user was pressed")}
-                      //onPress={() => this.setState({selectedId: item.user_id})}
-                      onPress={() => this.navigateAway('Feed', item.user_id)}
-                    >
-                    <View style={styles.view}>
-                      <Text style={ item.user_id === this.state.selectedId ? styles.text : styles.selected }>
-                        {item.user_givenname} {item.user_familyname}
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </div>
-                }
+                renderItem={({item}) => this.renderItem(item)}
                 keyExtractor={(item) => item.user_id}
               />
             </SafeAreaView>
@@ -161,25 +215,23 @@ const styles = StyleSheet.create ({
        fontSize: 15,
        fontWeight: 'bold',
        textAlign: 'center',
-       color: "black",
-       backgroundColor: "#888",
-       paddingTop: 30
+       color: "black", 
     },
     selected: {
-      fontSize: 15,
+      fontSize: 10,
       fontWeight: 'bold',
       textAlign: 'center',
       color: "black",
       backgroundColor: "white",
-      paddingTop: 30
    },
     button: {
        backgroundColor: "#4267B2",
-       padding: 20,
+       padding: 2,
+       margin:5,
        borderRadius: 5,
      },
      buttonText: {
-       fontSize: 20,
+       fontSize: 10,
        color: '#fff',
      },
      item: {

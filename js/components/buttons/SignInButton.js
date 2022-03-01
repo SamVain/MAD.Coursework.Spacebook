@@ -20,7 +20,8 @@ import { Button, ButtonGroup, withTheme, Text } from 'react-native-elements';
         <View style={styles.container}>
             <TouchableOpacity 
               style={styles.button}
-              onPress={() => this.props.login()}>
+              onPress={() => this.props.login()}
+              >
               <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
         </View>

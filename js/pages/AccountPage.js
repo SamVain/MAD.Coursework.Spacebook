@@ -18,21 +18,19 @@ class AccountPage extends Component {
       lastName: '',
       email: '',
       token: '',
-      userId: 0 //props.navigation.userId
+      userId: 0, //props.navigation.userId
+      postValue: '',
     };
   }
 
   componentDidMount() {
   
+    console.log('AccountPage: componentDidMount');
+
     this.getInfo();
   }
 
-  componentDidUpdate() {
 
-    console.log('componentDidUpdate');
-
-  } 
-  
   setLoggedIn = (value) => {
     this.props.setLoggedIn(value);
   } 
@@ -157,7 +155,9 @@ class AccountPage extends Component {
     .catch((error) => {
         console.log(error);
     });
-}
+  }
+
+  //makePost(timestamp)
 
   render() {
     
@@ -171,7 +171,7 @@ class AccountPage extends Component {
 
         {/* <Text style={styles.myStyle}>UserId: {this.props.navigation.state.params.userId}</Text> */}
 
-          <Text style={styles.title}>Account Details</Text>
+          <Text style={styles.title}>Account Details:</Text>
           <Text style={styles.label}>Name: {this.state.firstName} {this.state.lastName}</Text>
           <Text style={styles.label}>Email: {this.state.email}</Text>
           <Text style={styles.label}>List of Friends: {this.state.getfriends}</Text>
@@ -180,6 +180,12 @@ class AccountPage extends Component {
             onPress={() => this.logout()}>
                 <Text style={styles.buttonText}>Log Out</Text>
           </TouchableOpacity>
+          <TextInput 
+            multiline={true}
+            numberOfLines={3}
+            placeholder="Post Something Here..."
+            style={styles.multiline}
+          />
         </View>
       </>
 
@@ -219,6 +225,12 @@ const styles = StyleSheet.create ({
      fontSize: 20,
      color: '#fff',
    },
+   multiline: {
+    borderWidth: 0.5,
+    borderColor: '#0f0f0f',
+    padding: 4,
+    marginVertical: '1rem'
+  }
 });
 
 export default AccountPage;
