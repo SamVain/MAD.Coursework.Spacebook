@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button, SafeAreaVi
 import SpacebookAvatar from '../components/AccountPageComponents/SpacebookAvatar'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+
 class AccountPage extends Component {
 
   constructor(props){

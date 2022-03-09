@@ -1,20 +1,37 @@
 import React, { Component } from 'react'
-import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, FlatList,} from 'react-native'
+import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, FlatList, Alert, Modal, Pressable} from 'react-native'
 import SpacebookPosts from '../components/homeComponents/SpacebookPosts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
+
 
 
 class ShowPosts extends Component {
   constructor(props){
     super(props);
     this.state = {
-      post_id: ''
+      post_id: '',
+      modalVisible: false,
+      messageToPost: ''
     }
   }
 
+  setModalVisible = (visible) => {
+
+    this.setState({ modalVisible: visible });
+  }
+
+
+
+
+
   render() {
+
+
+    const { modalVisible } = this.state;
+
     let comp;
+
     if (this.props.item.numLikes > 0) {
 
       comp =               
@@ -31,14 +48,11 @@ class ShowPosts extends Component {
       <TouchableOpacity style={styles.button} onPress={() => {
           this.props.likePost(this.props.item.post_id)
         }
-      }>
+      }>  
         <Text style={styles.buttonText}>Like</Text>
       </TouchableOpacity> 
     }
-
-
-
-
+  
     return (
       <View style={{flex: 1, flexDirection: 'row'}}>
         <View style={{ justifyContent: 'flex-start'}}>
@@ -49,20 +63,79 @@ class ShowPosts extends Component {
             <View>
               {comp}
             </View>
+
             <View>
-              <TouchableOpacity style={styles.button} onPress={() => this.props.updatePost(this.props.item.post_id)}>
-              <Text style={styles.buttonText}>Update</Text>
-              </TouchableOpacity> 
-            </View>
+              <TouchableOpacity style={styles.button} onPress={() => {
+                
+                this.setState({messageToPost: this.props.item.text});                
+                this.setModalVisible(true);
+
+                }}>
+                <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            </View> 
+
+
             <View>
               <TouchableOpacity style={styles.button} onPress={() => this.props.deletePost(this.props.item.post_id)}>
-              <Text style={styles.buttonText}>Delete</Text>
-              </TouchableOpacity> 
+                <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
             </View>
+
+            <View style={styles.centeredView}>
+              <Modal
+                animationType='slide'
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => this.setModalVisible(false)}>
+                <View style={styles.centeredView}>
+                  <View style={styles.modalView}>
+                    <TextInput 
+                      multiline={true}
+                      numberOfLines={5}
+                      placeholder="Post Something Here..."
+                      style={styles.multiline}
+                      onChangeText={(x) => {
+                      
+                        this.setState({messageToPost: x});
+                        
+                        //this.props.item.text = x;
+                      }}
+                      value={this.state.messageToPost}
+                    />
+                    <View style={{flex: 1, flexDirection: 'row'}}>
+                      <View style={{ justifyContent: 'flex-start'}}>
+                        <TouchableOpacity 
+                          style={styles.button} 
+                          onPress={() => {
+                            
+                            this.props.updatePost(this.props.item.post_id, this.state.messageToPost);
+                            
+                            this.setModalVisible(false);
+                            
+                            }}>
+                          <Text style={styles.buttonText}>Update</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View style={{ justifyContent: 'flex-end'}}>
+                      <TouchableOpacity 
+                          style={styles.button} 
+                          onPress={() => {this.setModalVisible(false);}}>
+                          <Text style={styles.buttonText}>Close</Text>
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+
+
+                  </View>
+                </View>
+              </Modal>
+            </View>
+            
           </View>
         </View>
       </View>
-    )
+    );
   }
 }
 
@@ -152,6 +225,42 @@ class FeedPage extends Component {
     .catch(error => console.log(error))
   }
 
+  updatePost = (post_id, msg) => {
+    var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post/' + post_id
+    return fetch(url, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type' : 'application/json',
+        'X-Authorization': this.state.token 
+      },
+      body: JSON.stringify({
+        "text": msg
+      })
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return 'OK!';
+      } else if (response.status === 400) {
+        console.log('Bad Request');
+      } else if (response.status === 401) {
+        console.log('Unauthorised');
+      } else if (response.status === 403) {
+        console.log('Forbidden')
+      } else if (response.status === 404) {
+        console.log('Not Found')
+      } else if (response.status === 500) {
+        throw 'Server Error!';
+      } else {
+        throw 'Please try again!';
+      }
+    })
+    .then((r) => {
+      console.log(r);
+      this.getPosts();
+    })
+    .catch(error => console.log(error))
+  }
+
   //Like a post
   likePost = (post_id) => {
     var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post/' + post_id + '/like'
@@ -218,7 +327,7 @@ class FeedPage extends Component {
   }
 
   async componentDidUpdate(prevProps) {
-    console.log('FeedPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
+    //console.log('FeedPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
 
     if (prevProps.userData.selectedUserId !== this.props.userData.selectedUserId) {
 
@@ -239,9 +348,10 @@ class FeedPage extends Component {
     likePost={this.likePost}
     deleteLike={this.deleteLike}
     deletePost={this.deletePost}
+    updatePost={this.updatePost}
     /> 
   </div>
-
+  
   render() {
     return (
       <div>
@@ -301,9 +411,46 @@ const styles = StyleSheet.create ({
     borderRadius: 5,
   },
   buttonText: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#fff',
   },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center"
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  multiline: {
+    borderWidth: 0.5,
+    borderColor: '#0f0f0f',
+    padding: 10,
+    marginVertical: '1rem'
+  }
 });
 
 export default FeedPage

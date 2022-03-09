@@ -2,8 +2,8 @@
 import React, { Component, useState, useContext } from 'react'
 import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+/* import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'; */
 
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';

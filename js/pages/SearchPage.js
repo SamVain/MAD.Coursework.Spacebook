@@ -208,7 +208,7 @@ class SearchPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log('SearchPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
+    //console.log('SearchPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
     const {selectedUserId} = this.props.userData.selectedUserId;
     if (prevProps.text !== this.props.text) {
       this.updateAndNotify();
