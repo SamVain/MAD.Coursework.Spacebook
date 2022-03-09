@@ -24,7 +24,6 @@ class LoginPage extends Component {
 
    constructor(props){
        super(props);
-
        this.state = {
            email: '',
            password: '',
@@ -32,10 +31,10 @@ class LoginPage extends Component {
        };
    }
 
-   setLoggedIn = (value) => {
+/*    setLoggedIn = (value) => {
       this.props.setLoggedIn(value);
    }
-
+ */
    login = async () => {
       return fetch('http://localhost:3333/api/1.0.0/login', {
          method: 'POST',
@@ -48,43 +47,33 @@ class LoginPage extends Component {
           }),
       })
       .then((response) => {
-         
          if (response.status === 200) {
             return response.json();
          } else if (response.status === 400) {
             throw 'Invalid email or password, please try again!';
-         } else if (response.status === 401) {
-            throw 'Unauthorised!';
-          } else if (response.status === 403) {
-            throw 'Forbidden!';
-          } else if (response.status === 404) {
-            throw 'Not found!';
-          } else if (response.status === 500) {
+         } else if (response.status === 500) {
             throw 'Server error!';
-          } else {
+         } else {
             throw 'Error, please try again!';
           }
       })
       .then(async (responseJSON) => {
-
-
          await AsyncStorge.setItem('@session_token', responseJSON.token)
          .catch(error => {
             console.log(error);
             return;
          });
-
          await AsyncStorge.setItem('@id', JSON.stringify(responseJSON.id))
          .catch(error => {
             console.log(error);
             return;
          });
-         
-         this.setLoggedIn(true);
-         //this.props.navigation.navigate('Home');
+
+         this.props.setLoggedIn(true);
+         this.props.selectedUserId(responseJSON.id);
+
       })
       .catch((error) => {
-
          console.log(error);
       });
    } 

@@ -1,14 +1,73 @@
 import React, { Component } from 'react'
-import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-import { withNavigationFocus } from "react-navigation";
-
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, FlatList,} from 'react-native'
 import SpacebookPosts from '../components/homeComponents/SpacebookPosts'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
+
+
+class ShowPosts extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      post_id: ''
+    }
+  }
+
+  render() {
+    let comp;
+    if (this.props.item.numLikes > 0) {
+
+      comp =               
+      <TouchableOpacity style={styles.button} onPress={() => {
+          this.props.deleteLike(this.props.item.post_id);
+        }
+      }>
+        <Text style={styles.buttonText}>Unlike</Text>
+      </TouchableOpacity> 
+
+    } else {
+
+      comp =               
+      <TouchableOpacity style={styles.button} onPress={() => {
+          this.props.likePost(this.props.item.post_id)
+        }
+      }>
+        <Text style={styles.buttonText}>Like</Text>
+      </TouchableOpacity> 
+    }
+
+
+
+
+    return (
+      <View style={{flex: 1, flexDirection: 'row'}}>
+        <View style={{ justifyContent: 'flex-start'}}>
+          <Text>Post ID : {this.props.item.post_id}</Text>
+          <Text>Message : {this.props.item.text}</Text>
+          <Text>Likes   : {this.props.item.numLikes}</Text>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <View>
+              {comp}
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => this.props.updatePost(this.props.item.post_id)}>
+              <Text style={styles.buttonText}>Update</Text>
+              </TouchableOpacity> 
+            </View>
+            <View>
+              <TouchableOpacity style={styles.button} onPress={() => this.props.deletePost(this.props.item.post_id)}>
+              <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity> 
+            </View>
+          </View>
+        </View>
+      </View>
+    )
+  }
+}
 
 class FeedPage extends Component {
+
   constructor(props){
     super(props);
     this.state = {
@@ -22,38 +81,37 @@ class FeedPage extends Component {
       given_name: '',
       family_name: '',
       email: '', 
-      token: ''
+      token: '',
+      redraw: true
       }
   }
+
   //get all the spacebook posts
+  getUserId = async () => {
+    await AsyncStorage.getItem('@id')
+    .then(data => this.setState({userId: data}))
+    .catch(error => console.log(error));
+  }
+
+  getToken = async () => {
+    await AsyncStorage.getItem('@session_token')
+    .then (data => this.setState({token: data}))
+    .catch(error => console.log(error));
+  }
 
   getPosts = async () => {
-
-    await AsyncStorage.getItem('@session_token')
-        .then(data => this.setState({token: data}))
-        .catch(error => {
-            console.log(error);
-            return;
-        });
-
-      return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.state.userId + '/post', {
-        method: 'GET',
-        headers: {
-          'X-Authorization': this.state.token, 
-        }
-      })
-    .then((response) => 
-  
-      {
-          
+    this.setState({postData: []});
+    return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post', {
+      method: 'GET',
+      headers: {'X-Authorization': this.state.token}
+    })
+    .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } else if (response.status === 400) {
-          throw 'Invalid email or password, please try again!';
         } else if (response.status === 401) {
           throw 'Unauthorised!';
         } else if (response.status === 403) {
-          throw 'Forbidden!';
+          throw 'You Can Only View Posts of Yourself and Your Friends!';
         } else if (response.status === 404) {
           throw 'Not found!';
         } else if (response.status === 500) {
@@ -61,52 +119,157 @@ class FeedPage extends Component {
         } else {
           throw 'Error, please try again!';
         }
-      }    
-
-    
+      }
     )
-    .then((responseJson) => {
-      this.setState({ 
-        postData: responseJson,
-      });
-    })
-    .catch((error) => 
-      console.log(error)
-    )
+    .then(responseJson => this.setState({postData: responseJson}))
+    .catch(error => console.log(error))
   }
 
-  render() {
+  //Delete A Post
+  deletePost = (post_id) => {
+    var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post/' + post_id
+    return fetch(url, {
+      method: 'DELETE',
+      headers: {'X-Authorization': this.state.token}
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return 'OK!';
+      } else if (response.status === 401) {
+        throw 'Unauthorized';
+      } else if (response.status === 403) {
+        throw 'Forbidden - you can only delete your own posts';
+      } else if (response.status === 404) {
+        throw 'Not Found';
+      } else if (response.status === 500) {
+        throw 'Server Error'
+      } 
+    })
+    .then((r) => {
+      console.log(r);
+      this.getPosts();
+    })
+    .catch(error => console.log(error))
+  }
 
-    console.log("Rendering FeedPage");
-
-    if (this.props.route.params !== undefined) {
-
-      if (this.props.route.params.userId !== this.state.userId) {
+  //Like a post
+  likePost = (post_id) => {
+    var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post/' + post_id + '/like'
+    return fetch (url, {
+      method: 'POST',
+      headers: { 'X-Authorization': this.state.token }
+    })
+    .then((response) => {
       
-        console.log(this.props.route.params.userId);
-      
-        this.state.userId = this.props.route.params.userId;
+      if (response.status === 200) {
+        return 'OK!';
+      } else if (response.status === 401) {
+        throw 'Unauthorized';
+      } else if (response.status === 403) {
+        throw 'Forbidden - you have already liked this post';
+      } else if (response.status === 404) {
+        throw 'Not Found';
+      } else if (response.status === 500) {
+        throw 'Server Error'
+      } 
 
-        this.getPosts();
+    })
+    .then((r) => {
+      console.log(r);
+      this.getPosts();
+    })
+    .catch(error => console.log(error))
+  }
+
+  //Remove Like from Post
+  deleteLike = (post_id) => {
+    var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post/' + post_id + '/like'
+    return fetch (url, {
+      method: 'DELETE',
+      headers: {
+        'X-Authorization': this.state.token
       }
+    })
+    .then((response) => {
+      
+      if (response.status === 200) {
+        return 'OK!';
+      } else if (response.status === 401) {
+        throw 'Unauthorized';
+      } else if (response.status === 403) {
+        throw 'Forbidden - you have already liked this post';
+      } else if (response.status === 404) {
+        throw 'Not Found';
+      } else if (response.status === 500) {
+        throw 'Server Error'
+      } 
+
+    })
+    .then((r) => {
+      console.log(r);
+      this.getPosts();
+    })
+    .catch(error => console.log(error))
+  }
+
+  loadLoggedInUsersFeed = async () => {
+
+    this.props.selectedUserId(this.state.userId);
+  }
+
+  async componentDidUpdate(prevProps) {
+    console.log('FeedPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
+
+    if (prevProps.userData.selectedUserId !== this.props.userData.selectedUserId) {
+
+      await this.getPosts();
     }
- 
+  }
+
+  async componentDidMount() {
+    await this.getUserId();
+    await this.getToken();
+    await this.getPosts();
+  }
+
+  renderItem = (item) =>
+  <div>
+  <ShowPosts
+    item={item}
+    likePost={this.likePost}
+    deleteLike={this.deleteLike}
+    deletePost={this.deletePost}
+    /> 
+  </div>
+
+  render() {
     return (
-      <View style={styles.container}>
-        <Text>Feed Page!</Text>
-        <Text>
-          UserID 
-          {this.state.userId}
-            {/* {this.props.route.params.userId} */}
-        </Text>
-        <Text>
-          You have {this.state.postData.length} posts!
-        </Text>
-      </View>
+      <div>
+        <Text>Current Logged in UserId = {this.state.userId}</Text>
+        <View style={styles.container}>
+          <TouchableOpacity onPress={() => this.loadLoggedInUsersFeed()}>
+            <Text>My Feed</Text>
+          </TouchableOpacity>      
+          <Text>Feed Page!</Text>
+          <Text>
+            Feed User ID: 
+            {this.props.userData.selectedUserId}
+          </Text>
+          <Text>
+            You have {this.state.postData.length} posts!
+          </Text>
+          <SafeAreaView style={styles.container}>
+              <FlatList 
+                data={this.state.postData}
+                renderItem={({item}) => this.renderItem(item)}
+                keyExtractor={(item) => item.post_id}
+              />
+            </SafeAreaView>
+        </View>
+      </div>
     )
   }
 }
-
 
 const styles = StyleSheet.create ({
   container: {
@@ -132,14 +295,15 @@ const styles = StyleSheet.create ({
      paddingTop: 30
   },
   button: {
-     backgroundColor: "#4267B2",
-     padding: 20,
-     borderRadius: 5,
-   },
-   buttonText: {
-     fontSize: 20,
-     color: '#fff',
-   },
+    backgroundColor: "#4267B2",
+    padding: 2,
+    margin:5,
+    borderRadius: 5,
+  },
+  buttonText: {
+    fontSize: 10,
+    color: '#fff',
+  },
 });
 
 export default FeedPage
