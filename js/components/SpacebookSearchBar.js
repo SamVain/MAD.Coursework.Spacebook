@@ -1,33 +1,33 @@
-import * as React from "react";
-import { SearchBar } from "react-native-elements";
+// import * as React from "react";
+// import { SearchBar } from "react-native-elements";
 
-function SpacebookSearchBar() {
-  const [value, setValue] = React.useState("");
-  return (
-    <SearchBar
-      platform="android"
-      containerStyle={{}}
-      inputContainerStyle={{}}
-      inputStyle={{}}
-      leftIconContainerStyle={{}}
-      rightIconContainerStyle={{}}
-      lightTheme
-      loadingProps={{}}
-      onChangeText={newVal => setValue(newVal)}
-      onClearText={() => console.log(onClearText())}
-      placeholder="Search..."
-      placeholderTextColor="#888"
-      round
-      cancelButtonTitle="Cancel"
-      cancelButtonProps={{}}
-      onCancel={() => console.log(onCancel())}
-      value={value}
-      inputContainerStyle={{ height: 20 }}
-    />
-  );
-}
+// function SpacebookSearchBar() {
+//   const [value, setValue] = React.useState("");
+//   return (
+//     <SearchBar
+//       platform="android"
+//       containerStyle={{}}
+//       inputContainerStyle={{}}
+//       inputStyle={{}}
+//       leftIconContainerStyle={{}}
+//       rightIconContainerStyle={{}}
+//       lightTheme
+//       loadingProps={{}}
+//       onChangeText={newVal => setValue(newVal)}
+//       onClearText={() => console.log(onClearText())}
+//       placeholder="Search..."
+//       placeholderTextColor="#888"
+//       round
+//       cancelButtonTitle="Cancel"
+//       cancelButtonProps={{}}
+//       onCancel={() => console.log(onCancel())}
+//       value={value}
+//       inputContainerStyle={{ height: 20 }}
+//     />
+//   );
+// }
 
-export default SpacebookSearchBar
+// export default SpacebookSearchBar
 
 
 

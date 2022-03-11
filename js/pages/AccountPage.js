@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button, SafeAreaView, FlatList } from 'react-native'
-import SpacebookAvatar from '../components/AccountPageComponents/SpacebookAvatar'
+import { View, Text, TouchableOpacity, TextInput, StyleSheet, Button, SafeAreaView, FlatList, Image } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImagePicker from 'react-native-image-picker';
 
 
 class AccountPage extends Component {
@@ -16,7 +16,9 @@ class AccountPage extends Component {
       token: '',
       userId: 0, //props.navigation.userId
       postValue: '',
-      messageToPost: ''
+      messageToPost: '',
+      userImg: '',
+      listOfFriends: []
     };
   }
 
@@ -33,11 +35,69 @@ class AccountPage extends Component {
       .catch(error => console.log(error));
   }
 
+  uploadImage = async () => {
+
+    return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUser.user_id  + '/photo', {
+      method: 'POST',
+      headers: {'X-Authorization': this.state.token}
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.blob();
+      } else if (response.status === 401) {
+        throw 'Unauthorised!';
+      } else if (response.status === 403) {
+        throw 'You Can Only View Posts of Yourself and Your Friends!';
+      } else if (response.status === 404) {
+        throw 'Not found!';
+      } else if (response.status === 500) {
+        throw 'Server error!';
+      } else {
+        throw 'Error, please try again!';
+      }
+    })
+    .then(blob => this.setState({userImg: URL.createObjectURL(blob)}))
+    .catch(error => console.log(error))
+  }
+
+  getImage = async () => {
+
+    return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId  + '/photo', {
+      method: 'GET',
+      headers: {'X-Authorization': this.state.token}
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.blob();
+      } else if (response.status === 401) {
+        throw 'Unauthorised!';
+      } else if (response.status === 403) {
+        throw 'You Can Only View Posts of Yourself and Your Friends!';
+      } else if (response.status === 404) {
+        throw 'Not found!';
+      } else if (response.status === 500) {
+        throw 'Server error!';
+      } else {
+        throw 'Error, please try again!';
+      }
+    })
+    .then(blob => this.setState({userImg: URL.createObjectURL(blob)}))
+    .catch(error => console.log(error))
+  }
+
+
+
+
+
+
   async componentDidMount() {
 
     await this.getUserId();
     await this.getToken();
     await this.getInfo();
+    await this.getImage();
+    await this.getListOfFriends();
+    
   }
 
   setLoggedIn = (value) => {
@@ -100,24 +160,15 @@ class AccountPage extends Component {
     .catch(error => console.log(error));
   };
 
-  getfriends() {
-    var url = '';
-    if (this.props.route.params.userId === null) {
-      url = 'http://localhost:3333/api/1.0.0/user/' + this.state.userId + '/friends'
-    } else {
-      url = 'http://localhost:3333/api/1.0.0/user/' + this.state.userId + '/friends'
-    }
-    return fetch(url, + '/friends', {
-      method: "GET"
-    })
-    .then((response) => response.json())
-    .then((responseJson) => {
-        this.setState({
-            isLoading: false,
-            friends: responseJson,
-        });
-    })
-    .catch(error => console.log(error))
+  getListOfFriends =async () => {
+    var url = 'http://127.0.0.1:3333/api/1.0.0/user/' + this.state.userId + '/friends'
+    return fetch(url, {
+      method: 'GET',
+      headers: { 'X-Authorization': this.state.token },
+    })           
+    .then(response => response.json())
+    .then(responseJson => this.setState({listOfFriends: responseJson}))
+    .catch(error => console.log(error));
   }
 
   makePost = (user_id) => {
@@ -148,38 +199,82 @@ class AccountPage extends Component {
     .catch(error => console.log(error))
   }
 
+  changeImage = () => {
+
+    alert('Not working');
+
+  }
+
+  renderItem = (item) =>
+  <div>
+    <Text style={styles.text}>{item.user_givenname} {item.user_familyname}</Text>
+  </div>
+
+  
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.label}>Name: {this.state.firstName} {this.state.lastName}</Text>
-        <Text style={styles.label}>Email: {this.state.email}</Text>
-        <Text style={styles.label}>List of Friends: {this.state.getfriends}</Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => this.logout()}>
-              <Text style={styles.buttonText}>Log Out</Text>
-        </TouchableOpacity>
-        <Text style={styles.label}>Friend Requests:</Text>
-        <SafeAreaView style={styles.container}>
-          <FlatList 
-            data={this.state.listOfOutstandingFriendRequests}
-            renderItem={({item}) => this.renderItem(item)}
-            keyExtractor={(item) => item.user_id}
-          />
-        </SafeAreaView>
-        <TextInput 
-          multiline={true}
-          numberOfLines={3}
-          placeholder="Post Something Here..."
-          style={styles.multiline}
-          ref= {(text) => { this.messageToPost = text; }}
-          onChangeText={(messageToPost) => this.setState({messageToPost})}
-          value={this.state.messageToPost}
-        />
-        <TouchableOpacity style={styles.button} onPress={() => {this.makePost(this.state.userId)}}>
-          <Text style={styles.buttonText}>Post!</Text>
-        </TouchableOpacity>
-      </View>
+
+      <div>
+
+        <View style={styles.container}>
+
+          <View style={{justifyContent: 'flex-start'}}>
+            <Image 
+              style={{ width: 100, height: 100, resizeMode: 'contain', borderWidth: 1, borderColor:'black' }} 
+              source={{uri:this.state.userImg}}/>
+          </View>
+
+          <TouchableOpacity style={styles.button} onPress={() => {this.changeImage()}}>
+            <Text style={styles.buttonText}>Change Image</Text>
+          </TouchableOpacity>
+
+        </View>
+
+
+        <View style={styles.container}>
+
+          <Text style={styles.label}>Name: {this.state.firstName} {this.state.lastName}</Text>
+          <Text style={styles.label}>Email: {this.state.email}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => this.logout()}>
+            <Text style={styles.buttonText}>Log Out</Text>
+          </TouchableOpacity>
+
+        </View>
+
+
+        <View style={styles.container}>
+          <Text style={styles.textTitle}>Friends</Text>
+          <SafeAreaView style={styles.container}>
+            <FlatList 
+              data={this.state.listOfFriends}
+              renderItem={({item}) => this.renderItem(item)}
+              keyExtractor={(item) => item.user_id}
+            />
+          </SafeAreaView>
+
+        </View>
+
+        <View style={styles.container}>
+
+          <TextInput 
+            multiline={true}
+            numberOfLines={3}
+            placeholder="Post Something Here..."
+            style={styles.multiline}
+            ref= {(text) => { this.messageToPost = text; }}
+            onChangeText={(messageToPost) => this.setState({messageToPost})}
+            value={this.state.messageToPost}/>
+          <TouchableOpacity style={styles.button} onPress={() => {this.makePost(this.state.userId)}}>
+            <Text style={styles.buttonText}>Post!</Text>
+          </TouchableOpacity>   
+
+        </View>
+
+
+      </div>
+
     )
   }
 }
@@ -190,37 +285,44 @@ const styles = StyleSheet.create ({
      backgroundColor: '#fff',
      alignItems: 'center',
      justifyContent: 'top',
-     paddingTop: 20,
      borderWidth: 0,
-     borderColor: 'black'
+     borderColor: 'black',
+     padding: 5,
+     margin: 5,
    },
    instructions: {
      color: '#888',
      fontSize: 18,
-     marginHorizontal: 15,
-     marginBottom: 10,
    },
+   textTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: "#4267B2",
+    padding: 5
+ },
   text: {
      fontSize: 15,
-     fontWeight: 'bold',
+     fontWeight: 'normal',
      textAlign: 'center',
      color: "#4267B2",
-     paddingTop: 30
+     paddingTop: 5
   },
   button: {
      backgroundColor: "#4267B2",
-     padding: 20,
+     margin: 5,
+     padding: 5,
      borderRadius: 5,
    },
    buttonText: {
-     fontSize: 20,
+     fontSize: 15,
      color: '#fff',
    },
    multiline: {
     borderWidth: 0.5,
     borderColor: '#0f0f0f',
-    padding: 4,
-    marginVertical: '1rem'
+    padding: 5,
+    margin: 5,
   }
 });
 

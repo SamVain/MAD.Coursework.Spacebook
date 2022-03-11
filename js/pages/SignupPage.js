@@ -6,7 +6,7 @@ import ConfirmLastNameBox from '../components/inputBoxes/ConfirmLastNameBox';
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox';
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import ConfirmPasswordBox from '../components/inputBoxes/ConfirmPasswordInputBox';
-import SignUpButton from '../components/buttons/SignUpButton';
+//import SignUpButton from '../components/buttons/SignUpButton';
 import Title from '../components/misc/LoginSigninTitle';
 
 class SignupPage extends Component {

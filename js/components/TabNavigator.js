@@ -3,8 +3,6 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import AsyncStorge from '@react-native-async-storage/async-storage';
 
-
-import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import SignupPage from '../pages/SignupPage';
 import AccountPage from '../pages/AccountPage';
@@ -21,7 +19,8 @@ class TabNavigator extends Component {
 
     this.state = {
       isLoggedIn: false,
-      selectedUserId : 0
+      selectedUserId : 0,
+
     };
   }
 
@@ -31,8 +30,7 @@ class TabNavigator extends Component {
     })
   }
 
-  selectedUserId = (value) => { 
-    console.log('Setting selected user to ' + value) 
+   selectedUserId = (value) => { 
     this.setState({
       selectedUserId: value
     })
@@ -53,7 +51,7 @@ class TabNavigator extends Component {
                   props => <SearchPage 
                               {...props}
                               userData={this.state} 
-                              selectedUserId={this.selectedUserId} />
+                              selectedUserId={this.selectedUserId}/>
                 } />
 
               <Tab.Screen name="Feed" 
@@ -61,7 +59,7 @@ class TabNavigator extends Component {
                   props => <FeedPage 
                               {...props} 
                               userData={this.state} 
-                              selectedUserId={this.selectedUserId} />
+                              selectedUserId={this.selectedUserId}/>
                 } />
 
               <Tab.Screen name="Account"
@@ -69,7 +67,8 @@ class TabNavigator extends Component {
                   props => <AccountPage 
                               {...props} 
                               userData={this.state} 
-                              setLoggedIn={this.setLoggedIn} />
+                              setLoggedIn={this.setLoggedIn} 
+                              selectedUserId={this.selectedUserId}/>
                 } />
 
               <Tab.Screen name="Settings" component={Settings}></Tab.Screen>
@@ -85,7 +84,8 @@ class TabNavigator extends Component {
                               {...props} 
                               userData={this.state} 
                               setLoggedIn={this.setLoggedIn} 
-                              selectedUserId={this.selectedUserId} />
+                              selectedUserId={this.selectedUserId}/>
+
                 } />
               <Tab.Screen name="Signup" component={SignupPage}></Tab.Screen>
               

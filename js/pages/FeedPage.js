@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, FlatList, Alert, Modal, Pressable} from 'react-native'
-import SpacebookPosts from '../components/homeComponents/SpacebookPosts'
+import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView, FlatList, Alert, Modal, Pressable, Image} from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ThemedDialog from 'react-native-elements/dist/dialog/Dialog';
-
-
 
 class ShowPosts extends Component {
   constructor(props){
@@ -17,23 +14,13 @@ class ShowPosts extends Component {
   }
 
   setModalVisible = (visible) => {
-
     this.setState({ modalVisible: visible });
   }
 
-
-
-
-
   render() {
-
-
     const { modalVisible } = this.state;
-
     let comp;
-
     if (this.props.item.numLikes > 0) {
-
       comp =               
       <TouchableOpacity style={styles.button} onPress={() => {
           this.props.deleteLike(this.props.item.post_id);
@@ -41,9 +28,7 @@ class ShowPosts extends Component {
       }>
         <Text style={styles.buttonText}>Unlike</Text>
       </TouchableOpacity> 
-
     } else {
-
       comp =               
       <TouchableOpacity style={styles.button} onPress={() => {
           this.props.likePost(this.props.item.post_id)
@@ -54,34 +39,31 @@ class ShowPosts extends Component {
     }
   
     return (
-      <View style={{flex: 1, flexDirection: 'row'}}>
+      <View style={{flex: 1, flexDirection: 'row', paddingTop:10}}>
         <View style={{ justifyContent: 'flex-start'}}>
           <Text>Post ID : {this.props.item.post_id}</Text>
-          <Text>Message : {this.props.item.text}</Text>
-          <Text>Likes   : {this.props.item.numLikes}</Text>
+          <Text>Message : </Text>
+          <Text ellipsizeMode='tail' numberOfLines={2} style={{width:200}}>
+            {this.props.item.text}
+          </Text>
+          <Text>Likes : {this.props.item.numLikes}</Text>
           <View style={{flex: 1, flexDirection: 'row'}}>
             <View>
               {comp}
             </View>
-
             <View>
               <TouchableOpacity style={styles.button} onPress={() => {
-                
                 this.setState({messageToPost: this.props.item.text});                
                 this.setModalVisible(true);
-
                 }}>
                 <Text style={styles.buttonText}>Edit</Text>
               </TouchableOpacity>
             </View> 
-
-
             <View>
               <TouchableOpacity style={styles.button} onPress={() => this.props.deletePost(this.props.item.post_id)}>
                 <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
             </View>
-
             <View style={styles.centeredView}>
               <Modal
                 animationType='slide'
@@ -95,11 +77,8 @@ class ShowPosts extends Component {
                       numberOfLines={5}
                       placeholder="Post Something Here..."
                       style={styles.multiline}
-                      onChangeText={(x) => {
-                      
+                      onChangeText={(x) => {   
                         this.setState({messageToPost: x});
-                        
-                        //this.props.item.text = x;
                       }}
                       value={this.state.messageToPost}
                     />
@@ -108,11 +87,8 @@ class ShowPosts extends Component {
                         <TouchableOpacity 
                           style={styles.button} 
                           onPress={() => {
-                            
                             this.props.updatePost(this.props.item.post_id, this.state.messageToPost);
-                            
                             this.setModalVisible(false);
-                            
                             }}>
                           <Text style={styles.buttonText}>Update</Text>
                         </TouchableOpacity>
@@ -125,13 +101,10 @@ class ShowPosts extends Component {
                         </TouchableOpacity>
                       </View>
                     </View>
-
-
                   </View>
                 </View>
               </Modal>
             </View>
-            
           </View>
         </View>
       </View>
@@ -140,7 +113,6 @@ class ShowPosts extends Component {
 }
 
 class FeedPage extends Component {
-
   constructor(props){
     super(props);
     this.state = {
@@ -155,7 +127,8 @@ class FeedPage extends Component {
       family_name: '',
       email: '', 
       token: '',
-      redraw: true
+      redraw: true,
+      userImg: ''
       }
   }
 
@@ -172,29 +145,53 @@ class FeedPage extends Component {
     .catch(error => console.log(error));
   }
 
-  getPosts = async () => {
+  getPosts = () => {
     this.setState({postData: []});
     return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/post', {
       method: 'GET',
       headers: {'X-Authorization': this.state.token}
     })
     .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        } else if (response.status === 401) {
-          throw 'Unauthorised!';
-        } else if (response.status === 403) {
-          throw 'You Can Only View Posts of Yourself and Your Friends!';
-        } else if (response.status === 404) {
-          throw 'Not found!';
-        } else if (response.status === 500) {
-          throw 'Server error!';
-        } else {
-          throw 'Error, please try again!';
-        }
+      if (response.status === 200) {
+        return response.json();
+      } else if (response.status === 401) {
+        throw 'Unauthorised!';
+      } else if (response.status === 403) {
+        throw 'You Can Only View Posts of Yourself and Your Friends!';
+      } else if (response.status === 404) {
+        throw 'Not found!';
+      } else if (response.status === 500) {
+        throw 'Server error!';
+      } else {
+        throw 'Error, please try again!';
       }
-    )
+    })
     .then(responseJson => this.setState({postData: responseJson}))
+    .catch(error => console.log(error))
+  }
+
+  getImage = () => {
+
+    return fetch('http://127.0.0.1:3333/api/1.0.0/user/' + this.props.userData.selectedUserId + '/photo', {
+      method: 'GET',
+      headers: {'X-Authorization': this.state.token}
+    })
+    .then((response) => {
+      if (response.status === 200) {
+        return response.blob();
+      } else if (response.status === 401) {
+        throw 'Unauthorised!';
+      } else if (response.status === 403) {
+        throw 'You Can Only View Posts of Yourself and Your Friends!';
+      } else if (response.status === 404) {
+        throw 'Not found!';
+      } else if (response.status === 500) {
+        throw 'Server error!';
+      } else {
+        throw 'Error, please try again!';
+      }
+    })
+    .then(blob => this.setState({userImg: URL.createObjectURL(blob)}))
     .catch(error => console.log(error))
   }
 
@@ -300,7 +297,6 @@ class FeedPage extends Component {
       }
     })
     .then((response) => {
-      
       if (response.status === 200) {
         return 'OK!';
       } else if (response.status === 401) {
@@ -312,7 +308,6 @@ class FeedPage extends Component {
       } else if (response.status === 500) {
         throw 'Server Error'
       } 
-
     })
     .then((r) => {
       console.log(r);
@@ -321,24 +316,22 @@ class FeedPage extends Component {
     .catch(error => console.log(error))
   }
 
-  loadLoggedInUsersFeed = async () => {
-
+  loadLoggedInUsersFeed = () => {
     this.props.selectedUserId(this.state.userId);
   }
 
   async componentDidUpdate(prevProps) {
-    //console.log('FeedPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
-
     if (prevProps.userData.selectedUserId !== this.props.userData.selectedUserId) {
-
       await this.getPosts();
+      await this.getImage();
     }
   }
 
   async componentDidMount() {
     await this.getUserId();
     await this.getToken();
-    await this.getPosts();
+    this.getPosts();
+    this.getImage();
   }
 
   renderItem = (item) =>
@@ -355,39 +348,83 @@ class FeedPage extends Component {
   render() {
     return (
       <div>
-        <Text>Current Logged in UserId = {this.state.userId}</Text>
-        <View style={styles.container}>
-          <TouchableOpacity onPress={() => this.loadLoggedInUsersFeed()}>
-            <Text>My Feed</Text>
-          </TouchableOpacity>      
-          <Text>Feed Page!</Text>
-          <Text>
-            Feed User ID: 
-            {this.props.userData.selectedUserId}
-          </Text>
-          <Text>
-            You have {this.state.postData.length} posts!
-          </Text>
-          <SafeAreaView style={styles.container}>
-              <FlatList 
-                data={this.state.postData}
-                renderItem={({item}) => this.renderItem(item)}
-                keyExtractor={(item) => item.post_id}
-              />
-            </SafeAreaView>
+
+        <View style={styles.containerLeft}>
+          <View style={{flex: 1, flexDirection: 'row'}}>
+            <TouchableOpacity style={styles.button} onPress={() => this.loadLoggedInUsersFeed()}>
+              <Text style={styles.buttonText}>My Feed</Text>
+            </TouchableOpacity>
+          </View>            
         </View>
+
+        <View style={styles.container}>
+
+          <View style={{flex: 1, flexDirection: 'row'}}>
+
+            <View style={{flex: 1, flexDirection: 'column'}}>
+              <View  style={{justifyContent: 'flex-start'}}>
+                <Text style={styles.textTitle}>Feed Page!</Text>
+              </View>
+              <View  style={{ justifyContent: 'flex-start'}}>
+                <Text style={styles.text}>Feed User ID: {this.props.userData.selectedUserId}</Text>
+              </View> 
+              <View  style={{ justifyContent: 'flex-start'}}>
+                <Text style={styles.text}>You have {this.state.postData.length} posts!</Text>
+              </View>                               
+            </View>
+
+            <View  style={{justifyContent: 'flex-start'}}>
+              <Image 
+                  style={{ width: 100, height: 100, resizeMode: 'contain', borderWidth: 1, borderColor:'black' }}
+                  source={{uri:this.state.userImg}}
+                />
+            </View>
+
+          </View>
+
+        </View>
+
+        <SafeAreaView style={styles.containerLeft}>
+            <FlatList 
+              data={this.state.postData}
+              renderItem={({item}) => this.renderItem(item)}
+              keyExtractor={(item) => item.post_id}
+            />
+        </SafeAreaView>
+
       </div>
     )
   }
 }
 
 const styles = StyleSheet.create ({
+
+  containerLeft: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'Left',
+    justifyContent: 'top',
+    padding: 5,
+    martgin: 5,
+    borderWidth: 0,
+    borderColor: 'black'
+  },
+  containerRight: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'Right',
+    justifyContent: 'top',
+    padding: 5,
+    martgin: 5,
+    borderWidth: 0,
+    borderColor: 'black'
+  },
   container: {
      flex: 1,
      backgroundColor: '#fff',
      alignItems: 'center',
      justifyContent: 'top',
-     paddingTop: 20,
+     padding: 5,
      borderWidth: 0,
      borderColor: 'black'
    },
@@ -397,12 +434,19 @@ const styles = StyleSheet.create ({
      marginHorizontal: 15,
      marginBottom: 10,
    },
+   textTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: "#4267B2",
+    padding: 5
+ },
   text: {
      fontSize: 15,
-     fontWeight: 'bold',
+     fontWeight: 'normal',
      textAlign: 'center',
      color: "#4267B2",
-     paddingTop: 30
+     paddingTop: 5
   },
   button: {
     backgroundColor: "#4267B2",

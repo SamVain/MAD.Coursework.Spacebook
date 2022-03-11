@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native'
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import SpacebookSearchBar from "./SpacebookSearchBar";
-import HeaderButtonGroup from "./SpacebookHeaderButtonGroup";
+//import HeaderButtonGroup from "./SpacebookHeaderButtonGroup";
 //import LinearGradient from 'react-native-linear-gradient';
 import { LinearGradient } from 'expo-linear-gradient';
 

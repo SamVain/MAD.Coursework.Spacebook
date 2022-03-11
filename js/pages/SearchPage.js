@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { SearchBar, ListItem } from "react-native-elements";
 import { Button, View, Text, TouchableOpacity, TextInput, StyleSheet, FlatList, SafeAreaView, TouchableHighlight } from 'react-native'
-import SearchPageSearchBar from "../components/searchPageComponents/SearchPageSearchBar";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class FlatListItem extends Component {
@@ -208,11 +207,11 @@ class SearchPage extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    //console.log('SearchPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUserId);
-    const {selectedUserId} = this.props.userData.selectedUserId;
-    if (prevProps.text !== this.props.text) {
-      this.updateAndNotify();
-    }
+    //console.log('SearchPage : componentDidUpdate : selectedUserId : ' + this.props.userData.selectedUser.user_id);
+    //const {selectedUserId} = this.props.userData.selectedUserId;
+    //if (prevProps.text !== this.props.text) {
+    //  this.updateAndNotify();
+    //}
   }
 
   renderItem = (item) =>
@@ -229,7 +228,6 @@ class SearchPage extends Component {
   render() {
     return(
       <div>
-        <Text>Current UserId = {this.state.userId}</Text>
         <SearchBar
           platform='android'
           round

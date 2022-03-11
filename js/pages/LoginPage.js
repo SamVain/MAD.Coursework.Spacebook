@@ -2,14 +2,11 @@
 import React, { Component, useState, useContext } from 'react'
 import PropTypes from 'prop-types';
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-/* import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'; */
 
 import EnterEmailBox from '../components/inputBoxes/EmailInputBox'
 import EnterPasswordBox from '../components/inputBoxes/PasswordInputBox';
 import SignInButton from '../components/buttons/SignInButton';
 import Title from '../components/misc/LoginSigninTitle';
-import HomePage from './HomePage';
 import AsyncStorge from '@react-native-async-storage/async-storage';
 
 /*
@@ -31,10 +28,35 @@ class LoginPage extends Component {
        };
    }
 
-/*    setLoggedIn = (value) => {
-      this.props.setLoggedIn(value);
-   }
- */
+/*    getInfo =  (userId) => {
+      var url = 'http://localhost:3333/api/1.0.0/user/' + userId
+      return fetch(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Authorization': this.state.token
+        }
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          return response.json();
+        } else if (response.status === 401) {
+          throw 'Unauthorised';
+        } else if (response.status === 404) {
+          throw 'Not found!';
+        } else if (response.status === 500) {
+          throw 'Server error!';
+        } else {
+          throw 'Error, please try again!';
+        }
+      })
+      .then((responseJSON) => {
+         this.props.selectedUser(responseJSON);
+      })
+      .catch(error => console.log(error));
+    }; */
+
+
+
    login = async () => {
       return fetch('http://localhost:3333/api/1.0.0/login', {
          method: 'POST',
@@ -58,6 +80,9 @@ class LoginPage extends Component {
           }
       })
       .then(async (responseJSON) => {
+         
+         this.setState({token: responseJSON.token})
+         
          await AsyncStorge.setItem('@session_token', responseJSON.token)
          .catch(error => {
             console.log(error);
@@ -71,6 +96,11 @@ class LoginPage extends Component {
 
          this.props.setLoggedIn(true);
          this.props.selectedUserId(responseJSON.id);
+
+         //this.getInfo(responseJSON.id);
+
+
+
 
       })
       .catch((error) => {
